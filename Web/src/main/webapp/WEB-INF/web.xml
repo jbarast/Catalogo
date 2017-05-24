@@ -1,0 +1,61 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+	      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	      xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+	      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	      version="3.0">
+
+
+  <display-name>Archetype Created Web Application</display-name>
+  
+  <servlet>
+    <servlet-name>productocrud</servlet-name>
+    <servlet-class>
+      com.ipartek.jonBarnes.controladores.ProductoCRUDServlet
+    </servlet-class>
+  </servlet>
+  
+   <servlet>
+    <servlet-name>productoform</servlet-name>
+    <servlet-class>
+      com.ipartek.jonBarnes.controladores.ProductoFormServlet
+    </servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>usuariocrud</servlet-name>
+    <servlet-class>
+      com.ipartek.jonBarnes.controladores.UsuarioCRUDServlet
+    </servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>usuarioform</servlet-name>
+    <servlet-class>
+      com.ipartek.jonBarnes.controladores.UsuarioFormServlet
+    </servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>productocrud</servlet-name>
+    <url-pattern>/productocrud</url-pattern>
+  </servlet-mapping>
+  
+  
+  <servlet-mapping>
+    <servlet-name>productoform</servlet-name>
+    <url-pattern>/productoform</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>usuariocrud</servlet-name>
+    <url-pattern>/usuariocrud</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>usuarioform</servlet-name>
+    <url-pattern>/usuarioform</url-pattern>
+  </servlet-mapping>
+  
+  
+</web-app>
+
