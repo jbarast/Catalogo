@@ -19,7 +19,7 @@ public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/* package */static final String RUTA = "/WEB-INF/vistas/";
-	private static final String RUTA_PRINCIPAL = RUTA + "principal.jsp";
+	private static final String RUTA_PRINCIPAL = RUTA + "productocrud.jsp";
 	private static final String RUTA_LOGIN = RUTA + "login.jsp";
 
 	public static final int TIEMPO_INACTIVIDAD = 30 * 60;
@@ -32,6 +32,13 @@ public class LoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
+		
+	
+
+		
+		
+		
+		
 		// Recoger datos de vistas
 		String nombre = request.getParameter("nombre");
 		String pass = request.getParameter("pass");
