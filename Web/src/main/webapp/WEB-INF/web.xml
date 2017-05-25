@@ -6,6 +6,22 @@
 
 
   <display-name>Archetype Created Web Application</display-name>
+  <filter>
+  	<description>
+  	</description>
+  	<display-name>FiltroUsuarioNoLogeado</display-name>
+  	<filter-name>FiltroUsuarioNoLogeado</filter-name>
+  	<filter-class>com.ipartek.jonBarnes.filtros.FiltroUsuarioNoLogeado</filter-class>
+  </filter>
+  <filter-mapping>
+  	<filter-name>FiltroUsuarioNoLogeado</filter-name>
+  	<url-pattern>/*</url-pattern>
+  	<dispatcher>REQUEST</dispatcher>
+  	<dispatcher>FORWARD</dispatcher>
+  	
+  </filter-mapping>
+  
+  
   
   <servlet>
     <servlet-name>productocrud</servlet-name>
