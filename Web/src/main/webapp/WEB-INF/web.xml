@@ -6,6 +6,9 @@
 
 
   <display-name>Archetype Created Web Application</display-name>
+  <listener>
+  	<listener-class>com.ipartek.jonBarnes.listeners.Listener</listener-class>
+  </listener>
   
   <servlet>
     <servlet-name>productocrud</servlet-name>
