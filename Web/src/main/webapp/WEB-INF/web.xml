@@ -6,6 +6,19 @@
 
 
   <display-name>Archetype Created Web Application</display-name>
+  <filter>
+  	<description>
+  	</description>
+  	<display-name>FiltroUsuarioNoLogeado</display-name>
+  	<filter-name>FiltroUsuarioNoLogeado</filter-name>
+  	<filter-class>com.ipartek.jonBarnes.filters.FiltroUsuarioNoLogeado</filter-class>
+  </filter>
+  <filter-mapping>
+  	<filter-name>FiltroUsuarioNoLogeado</filter-name>
+  	<url-pattern>/*</url-pattern>
+  	<dispatcher>REQUEST</dispatcher>
+  	
+  </filter-mapping>
   <listener>
   	<listener-class>com.ipartek.jonBarnes.listeners.Listener</listener-class>
   </listener>
