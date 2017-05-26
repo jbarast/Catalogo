@@ -1,9 +1,9 @@
-<%--cabecera.jsp --%>
+<%--cabeceraNoAdmin.jsp --%>
 
 <%--
-     Cabeceras para los jsp.
+     Cabeceras para los jsp en cual el usuario no se el admin.
      Autor: jonBarnes
-     Version: 09/05/2017
+     Version: 26/05/2017
   
 
  --%>
@@ -34,10 +34,7 @@
 		<ul>
 			
 			<%--Botones en la parte superior. --%>
-			<li><a href="productoform?op=alta">Alta producto</a></li>
-			<li><a href="productocrud">Mantenimiento productos</a></li>
-			<li><a href="usuarioform?op=alta">Alta Usuario</a></li>
-			<li><a href="usuariocrud">Mantenimiento Usuarios</a></li>
+			
 			<a href="login?opcion=logout">Logout</a>
 		
 		</ul>
