@@ -1,4 +1,4 @@
-<%@ include file="includes/cabecera.jsp" %>
+<%@ include file="includes/cabeceraadmin.jsp" %>
 
 	<h2>Login</h2>
 	

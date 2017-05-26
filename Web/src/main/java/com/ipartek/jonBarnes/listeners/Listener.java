@@ -6,8 +6,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import com.ipartek.jonBarnes.DAL.ProductoDALFactory;
+import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
 import com.ipartek.jonBarnes.DAL.UsuarioDALFactory;
 import com.ipartek.jonBarnes.DAL.UsuariosDAL;
+import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
 import com.ipartek.jonBarnes.tipos.Usuario;
 
 /**
@@ -33,19 +36,37 @@ public class Listener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent sce) {
 
 		ServletContext application = sce.getServletContext();
-		UsuariosDAL dal = (UsuariosDAL) application.getAttribute("dal");
 
-		if (dal == null) {
-			dal = UsuarioDALFactory.getUsuariosDAL();
+		// Para usuarios.
+		UsuariosDAL dalRename = (UsuariosDAL) application.getAttribute("dal");
 
-			dal.alta(new Usuario("usuario1", "pass1"));
-			dal.alta(new Usuario("usuario2", "pass2"));
+		if (dalRename == null) {
+			dalRename = UsuarioDALFactory.getUsuariosDAL();
+
+			dalRename.alta(new Usuario("usuario1", "pass1"));
+			dalRename.alta(new Usuario("usuario2", "pass2"));
 
 			// Creamos el usuario adm.
 
-			dal.alta(new Usuario("admin", "admin"));
+			dalRename.alta(new Usuario("admin", "admin"));
 
-			application.setAttribute("dal", dal);
+			application.setAttribute("dal", dalRename);
+		}
+
+		// Para poroductos.
+
+		ProductoDALInterface dalProductos = (ProductoDALInterface) application.getAttribute("dalProductos");
+
+		if (dalProductos == null) {
+
+			dalProductos = ProductoDALFactory.getProductos();
+
+			// Creamos unos productos de prueba.
+			// dalProductos.altaProducto(new ProductoStockImagen());
+
+			dalProductos.altaProducto(new ProductoStockImagen());
+
+			application.setAttribute("dalProductos", dalProductos);
 		}
 
 	}

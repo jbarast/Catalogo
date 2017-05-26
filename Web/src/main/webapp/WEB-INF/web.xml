@@ -30,6 +30,13 @@
     </servlet-class>
   </servlet>
   
+  <servlet>
+    <servlet-name>listaproductos</servlet-name>
+    <servlet-class>
+      com.ipartek.jonBarnes.controladores.ListaProductosServlet
+    </servlet-class>
+  </servlet>
+  
    <servlet>
     <servlet-name>productoform</servlet-name>
     <servlet-class>
@@ -68,6 +75,11 @@
   <servlet-mapping>
     <servlet-name>productocrud</servlet-name>
     <url-pattern>/productocrud</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>listaproductos</servlet-name>
+    <url-pattern>/listaproductos</url-pattern>
   </servlet-mapping>
   
   
