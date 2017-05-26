@@ -34,8 +34,10 @@
 		<ul>
 			
 			<%--Botones en la parte superior. --%>
-			<li><a href="productoform?op=alta">Alta</a></li>
+			<li><a href="productoform?op=alta">Alta producto</a></li>
 			<li><a href="productocrud">Mantenimiento productos</a></li>
+			<li><a href="usuarioform?op=alta">Alta usuario</a></li>
+			<li><a href="usuariocrud">Mantenimiento usuarios</a></li>
 		
 		</ul>
 	</nav>
