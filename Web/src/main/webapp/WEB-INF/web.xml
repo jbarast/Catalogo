@@ -6,6 +6,7 @@
 
 
   <display-name>Archetype Created Web Application</display-name>
+  
   <filter>
   	<description>
   	</description>
@@ -19,6 +20,24 @@
   	<dispatcher>REQUEST</dispatcher>
   	
   </filter-mapping>
+  
+  <filter>
+  	<description>
+  	</description>
+  	<display-name>FiltroNoAdmin</display-name>
+  	<filter-name>FiltroNoAdmin</filter-name>
+  	<filter-class>com.ipartek.jonBarnes.filters.FiltroNoAdmin</filter-class>
+  </filter>
+  <filter-mapping>
+  	<filter-name>FiltroNoAdmin</filter-name>
+  	<url-pattern>/*</url-pattern>
+  	<dispatcher>REQUEST</dispatcher>
+  	</filter-mapping>
+ 
+  
+  
+  
+  
   <listener>
   	<listener-class>com.ipartek.jonBarnes.listeners.Listener</listener-class>
   </listener>
