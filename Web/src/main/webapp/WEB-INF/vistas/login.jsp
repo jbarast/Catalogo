@@ -1,5 +1,8 @@
 <%@ include file="includes/cabecerausuario.jsp" %>
 
+<%--Para el encoding. --%>
+<%@ page contentType="text/html; charset=UTF-8" %>
+
 	<h2>Login</h2>
 	
 	<jsp:useBean id="usuario" scope="request"
@@ -11,7 +14,7 @@
 			  required="required" minlength="4" value="${usuario.nombre}" />
 		</fieldset>
 		<fieldset>
-			<label for="pass">Contraseña</label> <input type="password" id="pass"
+			<label for="pass">ContraseÃ±a</label> <input type="password" id="pass"
 				name="pass" />
 		</fieldset>
 		<fieldset>
@@ -20,6 +23,5 @@
 		</fieldset>		
 	</form>
 	
-	<!-- Para agregar el alta usuario usuarioform?alta -->
-		<a href="usuarioform?op=alta">Alta</a>
+	
 <%@ include file="includes/pie.jsp" %>

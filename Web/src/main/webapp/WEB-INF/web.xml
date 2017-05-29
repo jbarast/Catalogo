@@ -14,11 +14,23 @@
   	<filter-name>FiltroSesiones</filter-name>
   	<filter-class>com.ipartek.jonBarnes.filters.FiltroSesiones</filter-class>
   </filter>
+  <filter>
+  	<description>
+  	</description>
+  	<display-name>EncodingFilter</display-name>
+  	<filter-name>EncodingFilter</filter-name>
+  	<filter-class>com.ipartek.jonBarnes.filters.EncodingFilter</filter-class>
+  </filter>
   <filter-mapping>
   	<filter-name>FiltroSesiones</filter-name>
   	<url-pattern>/*</url-pattern>
   	<dispatcher>REQUEST</dispatcher>
   	
+  </filter-mapping>
+  <filter-mapping>
+  	<filter-name>EncodingFilter</filter-name>
+  	<url-pattern>/*</url-pattern>
+  	<dispatcher>REQUEST</dispatcher>
   </filter-mapping>
   
     

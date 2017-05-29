@@ -10,6 +10,9 @@
 <%--cabecera --%>
 <%@ include file="includes/cabecera.jsp"%>
 
+<%--Para el encoding. --%>
+<%@ page contentType="text/html; charset=UTF-8" %>
+
 <%--Cargamos la libreria core de jstl --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -44,7 +47,7 @@
 				<td>${producto.id}</td>
 				<td>${producto.nombre}</td>
 				<td>${producto.descripcion}</td>
-				<td>${producto.precio}</td>
+				<td>${producto.precio} €</td>
 				<td>${producto.stock}</td>
 				<td><IMG src="${producto.rutaImagen}" width="100" height="100"/></td>
 				

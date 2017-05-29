@@ -1,5 +1,8 @@
 <%@ include file="includes/cabecera.jsp" %>
 
+<%--Para el encoding. --%>
+<%@ page contentType="text/html; charset=UTF-8" %>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
@@ -21,11 +24,11 @@
 		  	/>
 		</fieldset>
 		<fieldset>
-			<label for="pass">Contraseña</label> <input type="password" id="pass"
+			<label for="pass">ContraseÃ±a</label> <input type="password" id="pass"
 				name="pass" />
 		</fieldset>
 		<fieldset>
-			<label for="pass2">Contraseña otra vez</label> <input type="password" id="pass2"
+			<label for="pass2">ContraseÃ±a otra vez</label> <input type="password" id="pass2"
 				name="pass2" />
 		</fieldset>
 		<fieldset>

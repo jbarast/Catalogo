@@ -1,5 +1,9 @@
 <%@ include file="includes/cabecera.jsp"%>
 
+
+<%--Para el encoding. --%>
+<%@ page contentType="text/html; charset=UTF-8" %>
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <h2>Mantenimiento de usuarios</h2>
@@ -9,7 +13,7 @@
 		<tr>
 			<th>Operaciones</th>
 			<th>Usuario</th>
-			<th>Contraseña</th>
+			<th>ContraseÃ±a</th>
 		</tr>
 	</thead>
 	<tbody>

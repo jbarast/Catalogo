@@ -10,6 +10,9 @@
 <%--Cabecera --%>
 <%@ include file="includes/cabecera.jsp" %>
 
+<%--Para el encoding. --%>
+<%@ page contentType="text/html; charset=UTF-8" %>
+
 <%--Cargamos las librerias. --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>

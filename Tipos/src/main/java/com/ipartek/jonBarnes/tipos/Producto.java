@@ -36,7 +36,7 @@ public class Producto {
 		this.id = id;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
-		this.precio = precio + "�";
+		this.precio = precio;
 	}
 
 	public Producto() {
@@ -44,7 +44,7 @@ public class Producto {
 		this.id = "No id";
 		this.nombre = "Producto Desconocido";
 		this.descripcion = "No hay descripcion";
-		this.precio = "0�";
+		this.precio = "0";
 	}
 
 	// Getters y setters.
@@ -78,7 +78,7 @@ public class Producto {
 	}
 
 	public void setPrecio(String precio) {
-		this.precio = precio + "�";
+		this.precio = precio;
 	}
 
 	// getter y setter para los errores.
