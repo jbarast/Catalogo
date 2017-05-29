@@ -4,7 +4,7 @@ package com.ipartek.jonBarnes.DAL;
 
 /**
  * 
- * No se vien lo que hace esta clase.
+ * 
  * 
  * @author jonBarnes
  * @version 10/05/2017

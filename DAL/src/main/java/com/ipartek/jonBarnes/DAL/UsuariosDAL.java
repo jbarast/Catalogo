@@ -1,7 +1,17 @@
+//UsuariosDAL.java
+
 package com.ipartek.jonBarnes.DAL;
 
 import com.ipartek.jonBarnes.tipos.Usuario;
 
+/**
+ * 
+ * La dal para los usuarios.
+ * 
+ * @author jonBarnes
+ * @version 24/05/2017
+ *
+ */
 public interface UsuariosDAL {
 	public void alta(Usuario usuario);
 

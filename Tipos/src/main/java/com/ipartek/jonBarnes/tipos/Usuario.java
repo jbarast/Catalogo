@@ -2,8 +2,62 @@
 
 package com.ipartek.jonBarnes.tipos;
 
+/**
+ * 
+ * Clase Usuario.
+ * 
+ * @author jonBarnes
+ * @version 24/05/2017
+ *
+ */
 public class Usuario {
+
+	// atributos.
 	private String nombre, pass, errores;
+
+	// Constructores.
+	public Usuario(String nombre, String pass) {
+		super();
+		this.nombre = nombre;
+		this.pass = pass;
+	}
+
+	public Usuario() {
+		this("", "");
+	}
+
+	// getters y setters.
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getPass() {
+		return pass;
+	}
+
+	public void setPass(String pass) {
+		this.pass = pass;
+	}
+
+	public String getErrores() {
+		return errores;
+	}
+
+	public void setErrores(String errores) {
+		this.errores = errores;
+	}
+
+	// Otros metodos.
+
+	@Override
+	public String toString() {
+		return "Usuario [nombre=" + nombre + ", pass=" + pass + "]";
+	}
 
 	@Override
 	public int hashCode() {
@@ -36,42 +90,4 @@ public class Usuario {
 		return true;
 	}
 
-	public Usuario(String nombre, String pass) {
-		super();
-		this.nombre = nombre;
-		this.pass = pass;
-	}
-
-	public Usuario() {
-		this("", "");
-	}
-
-	@Override
-	public String toString() {
-		return "Usuario [nombre=" + nombre + ", pass=" + pass + "]";
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public String getPass() {
-		return pass;
-	}
-
-	public void setPass(String pass) {
-		this.pass = pass;
-	}
-
-	public String getErrores() {
-		return errores;
-	}
-
-	public void setErrores(String errores) {
-		this.errores = errores;
-	}
 }

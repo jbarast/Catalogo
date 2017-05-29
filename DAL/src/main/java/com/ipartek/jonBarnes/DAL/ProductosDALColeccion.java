@@ -1,11 +1,11 @@
+//ProductosDALColeccion.java
+
 package com.ipartek.jonBarnes.DAL;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
-
-//imports de mi clase
 
 /**
  * 
