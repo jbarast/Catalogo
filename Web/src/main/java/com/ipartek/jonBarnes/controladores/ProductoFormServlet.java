@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.ipartek.jonBarnes.DAL.DALException;
 import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
 import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
@@ -26,6 +28,9 @@ import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
 // @WebServlet("/productoform")
 public class ProductoFormServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+	// Para hacer el log4j.
+	private static Logger log = Logger.getLogger(ProductoFormServlet.class);
 
 	/**
 	 * 
@@ -90,6 +95,10 @@ public class ProductoFormServlet extends HttpServlet {
 		switch (op) {
 		case "alta":
 			try {
+				// Indicamos que producto se a dado de alta.
+				log.info(String.format("Objeto %s añadido a la tienda.", producto.getNombre()));
+
+				// Damos de alta el producto.
 				dalProductos.altaProducto(producto);
 			} catch (DALException de) {
 				producto.setErrores("El producto ya existe");
@@ -103,6 +112,10 @@ public class ProductoFormServlet extends HttpServlet {
 			break;
 		case "modificar":
 			try {
+				// Indicamos que producto se a modificado..
+				log.info(String.format("Objeto %s modificado de la  tienda.", producto.getNombre()));
+
+				// Hacemos la modificacion.
 				dalProductos.modificarProducto(producto);
 			} catch (DALException de) {
 				producto.setErrores(de.getMessage());
@@ -118,6 +131,11 @@ public class ProductoFormServlet extends HttpServlet {
 
 			break;
 		case "borrar":
+
+			// Indicamos que producto se a dado de alta.
+			log.info(String.format("Objeto %s borrado de la tienda.", producto.getNombre()));
+
+			// Borramos el producto.
 			dalProductos.borrarProducto(producto);
 			request.getRequestDispatcher(ConstantesGlobales.RUTA_SERVLET_LISTADO).forward(request, response);
 			break;

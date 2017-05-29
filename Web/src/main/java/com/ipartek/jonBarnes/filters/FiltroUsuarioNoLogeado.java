@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import com.ipartek.jonBarnes.tipos.Usuario;
 
 /**
@@ -23,6 +25,9 @@ import com.ipartek.jonBarnes.tipos.Usuario;
 public class FiltroUsuarioNoLogeado implements Filter {
 
 	private FilterConfig config;
+
+	// Para hacer el log4j.
+	private static Logger log = Logger.getLogger(FiltroUsuarioNoLogeado.class);
 
 	/**
 	 * Metodo destroy,vacio.
@@ -71,10 +76,16 @@ public class FiltroUsuarioNoLogeado implements Filter {
 
 		// Para mirar el path.
 		if (username == "" && !(path.equals("/login"))) {
+
+			// Ponemos mensaje de intruso.
+			log.info("Intento de entrada de intruso");
+
+			// Mandamos a la pantalla de login.
 			res.sendRedirect("/login");
 
 		}
 
+		// Seguimos con los filtros.
 		chain.doFilter(request, response);
 
 	}

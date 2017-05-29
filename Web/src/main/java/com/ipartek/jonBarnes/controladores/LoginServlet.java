@@ -14,7 +14,6 @@ import org.apache.log4j.Logger;
 
 import com.ipartek.jonBarnes.DAL.UsuarioDALFactory;
 import com.ipartek.jonBarnes.DAL.UsuariosDAL;
-import com.ipartek.jonBarnes.listeners.Listener;
 import com.ipartek.jonBarnes.tipos.Usuario;
 
 //@WebServlet("/login")
@@ -30,7 +29,7 @@ public class LoginServlet extends HttpServlet {
 	/* package */static final int MINIMO_CARACTERES = 4;
 
 	// Para hacer el log4j.
-	private static Logger log = Logger.getLogger(Listener.class);
+	private static Logger log = Logger.getLogger(LoginServlet.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -91,6 +90,11 @@ public class LoginServlet extends HttpServlet {
 
 		// Redirigir a una nueva vista
 		if (quiereSalir) {
+
+			// Indicamos quien sale de la session.
+			log.info(String.format("Fin de sesion de %s.", usuario.getNombre()));
+
+			// Finalizamos la sesion.
 			session.invalidate();
 			request.getRequestDispatcher(RUTA_LOGIN).forward(request, response);
 		} else if (esUsuarioYaRegistrado) {

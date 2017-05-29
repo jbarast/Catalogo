@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.ipartek.jonBarnes.DAL.DALException;
 import com.ipartek.jonBarnes.DAL.UsuariosDAL;
 import com.ipartek.jonBarnes.tipos.Usuario;
@@ -16,6 +18,9 @@ import com.ipartek.jonBarnes.tipos.Usuario;
 //@WebServlet("/usuarioform")
 public class UsuarioFormServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+	// Para hacer el log4j.
+	private static Logger log = Logger.getLogger(UsuarioFormServlet.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -52,6 +57,10 @@ public class UsuarioFormServlet extends HttpServlet {
 		switch (op) {
 		case "alta":
 			if (pass.equals(pass2)) {
+
+				// Indicamos que usuario se da de alta.
+				log.info(String.format("Registrado el usuario %s.", nombre));
+
 				dal.alta(usuario);
 				rutaListado.forward(request, response);
 			} else {
@@ -64,6 +73,10 @@ public class UsuarioFormServlet extends HttpServlet {
 		case "modificar":
 			if (pass.equals(pass2)) {
 				try {
+
+					// Indicamos que usuario a sido modificado.
+					log.info(String.format("Modificado el usuario %s.", nombre));
+
 					dal.modificar(usuario);
 				} catch (DALException de) {
 					usuario.setErrores(de.getMessage());
@@ -80,11 +93,14 @@ public class UsuarioFormServlet extends HttpServlet {
 
 			break;
 		case "borrar":
+			// Indicamos que usuario se borra.
+			log.info(String.format("Borrado el usuario %s.", nombre));
+
+			// Borramos el usuario.
 			dal.borrar(usuario);
 			rutaListado.forward(request, response);
 
 			break;
 		}
 	}
-
 }
