@@ -10,12 +10,12 @@
   <filter>
   	<description>
   	</description>
-  	<display-name>FiltroUsuarioNoLogeado</display-name>
-  	<filter-name>FiltroUsuarioNoLogeado</filter-name>
-  	<filter-class>com.ipartek.jonBarnes.filters.FiltroUsuarioNoLogeado</filter-class>
+  	<display-name>FiltroSesiones</display-name>
+  	<filter-name>FiltroSesiones</filter-name>
+  	<filter-class>com.ipartek.jonBarnes.filters.FiltroSesiones</filter-class>
   </filter>
   <filter-mapping>
-  	<filter-name>FiltroUsuarioNoLogeado</filter-name>
+  	<filter-name>FiltroSesiones</filter-name>
   	<url-pattern>/*</url-pattern>
   	<dispatcher>REQUEST</dispatcher>
   	

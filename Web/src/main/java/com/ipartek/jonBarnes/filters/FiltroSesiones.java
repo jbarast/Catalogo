@@ -21,13 +21,16 @@ import com.ipartek.jonBarnes.tipos.Usuario;
 /**
  * Filtro para cuando un usuario no este logeado que le manda para login, si no
  * esta en la pantalla de login o alta de usuario.
+ * 
+ * @author jonBarnes
+ * @version 29/05/2017
  */
-public class FiltroUsuarioNoLogeado implements Filter {
+public class FiltroSesiones implements Filter {
 
 	private FilterConfig config;
 
 	// Para hacer el log4j.
-	private static Logger log = Logger.getLogger(FiltroUsuarioNoLogeado.class);
+	private static Logger log = Logger.getLogger(FiltroSesiones.class);
 
 	/**
 	 * Metodo destroy,vacio.
@@ -67,7 +70,7 @@ public class FiltroUsuarioNoLogeado implements Filter {
 
 		// Miramos que dato coge.
 
-		System.out.println(username);
+		// System.out.println(username);
 
 		// Para sacar la URI:
 		String path = req.getRequestURI();

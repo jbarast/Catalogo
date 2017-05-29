@@ -18,12 +18,12 @@ import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
 //Mis imports.
 
 /**
- * Servlet para productocrud.jsp
+ * Servlet para listaproductos.jsp
  * 
  * @author jonBarnes
  * @version 10/05/2017
  */
-// @WebServlet("/productocrud")
+// @WebServlet("/listaproductos")
 public class ListaProductosServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -53,10 +53,6 @@ public class ListaProductosServlet extends HttpServlet {
 		ServletContext applicationProductos = getServletContext();
 		ProductoDALInterface dalProductos = (ProductoDALInterface) applicationProductos.getAttribute("dalProductos");
 
-		// Las operaciones.
-		// TODO hacerlo:
-		// https://github.com/ipartek/JavaServidorTardes/blob/master/HolaMundo/src/com/ipartek/ejemplos/javierlete/controladores/UsuarioCRUDServlet.java
-
 		// Miramos que la dalProductos no este vacia.
 		if (dalProductos == null) {
 
@@ -70,7 +66,7 @@ public class ListaProductosServlet extends HttpServlet {
 
 		ProductoStockImagen[] productos = dalProductos.buscarTodosLosProductos();
 		request.setAttribute("productos", productos);
-		request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO).forward(request, response);
+		request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_PRODUCTOS_USUARIO).forward(request, response);
 
 	}
 }

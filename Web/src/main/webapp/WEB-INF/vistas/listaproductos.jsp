@@ -8,7 +8,7 @@
  --%>
 
 <%--cabecera --%>
-<%@ include file="includes/cabecerausuario.jsp"%>
+ <%@ include file="includes/cabecerausuario.jsp"%>
 
 <%--Cargamos la libreria core de jstl --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -16,14 +16,13 @@
 
 
 <%--Titulo --%>
-<h2>Mantenimiento de productos.</h2>
+<h2>Lista de productos.</h2>
 <%--Tabla --%>
 <table border="1">
 
 <%--Titulos de las columnas. --%>
 	<thead>
-		<tr>
-			
+		<tr>			
 			<th>Id</th>
 			<th>Nombre</th>
 			<th>Descripcion</th>
@@ -36,8 +35,7 @@
 	
 	<%--Bucle de lectura de elementos de la tienda. --%>
 		<c:forEach items="${requestScope.productos}" var="producto">
-			<tr>
-				
+			<tr>				
 				<td>${producto.id}</td>
 				<td>${producto.nombre}</td>
 				<td>${producto.descripcion}</td>
