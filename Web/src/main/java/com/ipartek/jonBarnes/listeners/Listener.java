@@ -51,6 +51,7 @@ public class Listener implements ServletContextListener {
 			dalRename.alta(new Usuario("admin", "admin"));
 
 			application.setAttribute("dal", dalRename);
+
 		}
 
 		// Para poroductos.
@@ -67,6 +68,7 @@ public class Listener implements ServletContextListener {
 			dalProductos.altaProducto(new ProductoStockImagen());
 
 			application.setAttribute("dalProductos", dalProductos);
+
 		}
 
 	}

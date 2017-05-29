@@ -32,13 +32,7 @@ public class LoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
-		
-	
 
-		
-		
-		
-		
 		// Recoger datos de vistas
 		String nombre = request.getParameter("nombre");
 		String pass = request.getParameter("pass");
@@ -94,7 +88,9 @@ public class LoginServlet extends HttpServlet {
 			session.invalidate();
 			request.getRequestDispatcher(RUTA_LOGIN).forward(request, response);
 		} else if (esUsuarioYaRegistrado) {
-			request.getRequestDispatcher(RUTA_PRINCIPAL).forward(request, response);
+			// request.getRequestDispatcher(RUTA_PRINCIPAL).forward(request,
+			// response);
+			response.sendRedirect("/productocrud");
 		} else if (sinParametros) {
 			request.getRequestDispatcher(RUTA_LOGIN).forward(request, response);
 		} else if (!nombreValido || !passValido) {
@@ -105,7 +101,10 @@ public class LoginServlet extends HttpServlet {
 		} else if (esValido) {
 			session.setAttribute("usuario", usuario);
 			// response.sendRedirect("principal.jsp");
-			request.getRequestDispatcher(RUTA_PRINCIPAL).forward(request, response);
+			// request.getRequestDispatcher(RUTA_PRINCIPAL).forward(request,
+			// response);
+			response.sendRedirect("/productocrud");
+
 		} else {
 			usuario.setErrores("El usuario y contraseña introducidos no son válidos");
 			request.setAttribute("usuario", usuario);
