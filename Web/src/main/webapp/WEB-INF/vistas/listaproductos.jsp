@@ -8,7 +8,7 @@
  --%>
 
 <%--cabecera --%>
-<%@ include file="includes/cabeceraadmin.jsp"%>
+<%@ include file="includes/cabecerausuario.jsp"%>
 
 <%--Cargamos la libreria core de jstl --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>

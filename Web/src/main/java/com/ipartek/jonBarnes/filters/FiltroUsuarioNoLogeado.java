@@ -82,11 +82,22 @@ public class FiltroUsuarioNoLogeado implements Filter {
 
 			// Mandamos a la pantalla de login.
 			res.sendRedirect("/login");
+			return;
+
+		}
+
+		if (!username.equals("admin") && !(path.equals("/login")) && !username.equals("")
+				&& !path.equals("/listaproductos")) {
+			// Mandame a la lista de productos.
+			res.sendRedirect("/listaproductos");
+
+			return;
 
 		}
 
 		// Seguimos con los filtros.
 		chain.doFilter(request, response);
+		return;
 
 	}
 
