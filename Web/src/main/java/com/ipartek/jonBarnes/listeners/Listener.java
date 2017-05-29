@@ -75,8 +75,37 @@ public class Listener implements ServletContextListener {
 			// Creamos unos productos de prueba.
 			// dalProductos.altaProducto(new ProductoStockImagen());
 
-			dalProductos.altaProducto(new ProductoStockImagen());
+			// El arca.
+			dalProductos.altaProducto(new ProductoStockImagen("1", "Arca Perdida",
+					"El arca que contiene los diez mandamientos. Recomendamos no abrirla.", "1.0000.0000", "1",
+					"https://i.ytimg.com/vi/LaXq8DetoNI/hqdefault.jpg"));
 
+			// El necromonicon.
+			dalProductos.altaProducto(new ProductoStockImagen("2", "Necromonicum",
+					"Libro para traer al mundo a los primogenitos o no.", "1.5000.0000", "1",
+					"https://i.ytimg.com/vi/9hgoOPgq9OY/maxresdefault.jpg"));
+
+			// Espada excalibur.
+			dalProductos.altaProducto(new ProductoStockImagen("3", "Espada Excalibur",
+					"Espada para reinar Inglaterra. No nos hacemos cargo de entregar al cliente Inglaterra",
+					"15.5000.0000", "1",
+					"http://4.bp.blogspot.com/-FG_uA1t58h4/UMj1vAUNmhI/AAAAAAAAAJs/DuCh4tcptlk/s1600/excalibur.jpg"));
+
+			// Videojuego e.t.
+			dalProductos.altaProducto(new ProductoStockImagen("4", "Videojuego E.T.",
+					"Consigue una copia de uno de los videojuegos mas galardonados jamas creado.", "1.000", "100.000",
+					"http://img3.meristation.com/files/imagenes/general/1398540488-2.jpg"));
+
+			// Maquina del tiempo delorian.
+			dalProductos
+					.altaProducto(new ProductoStockImagen(
+							"5",
+							"Maquina del tiempo delorean",
+							"Maquina del tiempo modelo delorian. No nos hacemos cargo del mal uso que den los clientes.Combustible no incluido por temas legales.",
+							"1", "50.000.000.000",
+							"https://static.motor.es/fotos-noticias/2015/10/min652x435/curiosidades-delorean-regreso-al-futuro-201523728_4.jpg"));
+
+			//
 			application.setAttribute("dalProductos", dalProductos);
 
 			// Para indicar que los usuarios han sido inicializados.
