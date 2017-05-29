@@ -1,3 +1,16 @@
+<%--login.jsp --%>
+
+<%--
+	Pagina de login de la aplicacion.
+	author: jon Barnes
+	version: 24/05/2017
+
+
+ --%>
+
+
+
+<%--Cargamos la cabecera --%>
 <%@ include file="includes/cabecerausuario.jsp" %>
 
 <%--Para el encoding. --%>
@@ -5,9 +18,12 @@
 
 	<h2>Login</h2>
 	
+	<%--Cargamos la clase usuario. --%>
 	<jsp:useBean id="usuario" scope="request"
 		class="com.ipartek.jonBarnes.tipos.Usuario" />
-
+		
+		
+	<%--El formulario. --%>
 	<form action="login" method="post">
 		<fieldset>
 			<label for="nombre">Nombre</label> <input id="nombre" name="nombre"
@@ -23,5 +39,5 @@
 		</fieldset>		
 	</form>
 	
-	
+<%--El pie de la pagina. --%>	
 <%@ include file="includes/pie.jsp" %>

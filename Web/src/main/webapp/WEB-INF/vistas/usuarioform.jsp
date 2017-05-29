@@ -1,16 +1,30 @@
+<%--usuarioform.jsp --%>
+
+<%--
+	Para dar de alta, modificar y borrar usuarios.
+	
+	autor: jon Barnes
+	version: 24/05/2017
+ --%>
+
+
+<%--Cabecera de la pagina. --%>
 <%@ include file="includes/cabecera.jsp" %>
 
 <%--Para el encoding. --%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 
+<%--Cargamos las librerias de jstl. --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 	<h2>Formulario de usuarios</h2>
 	
+	<%--Cargamos la clase usuario. --%>
 	<jsp:useBean id="usuario" scope="request"
 		class="com.ipartek.jonBarnes.tipos.Usuario" />
 
+<%--Formulario dependiente de la opcion elegida. --%>
 	<form action="usuarioform" method="post">
 		<fieldset>
 			<label for="nombre">Nombre</label> 
@@ -44,5 +58,7 @@
 			document.forms[0].onsubmit = confirmarBorrado;
 		</script>
 	</c:if>
-	
+
+
+<%--Pie de la pagina. --%>	
 <%@ include file="includes/pie.jsp" %>

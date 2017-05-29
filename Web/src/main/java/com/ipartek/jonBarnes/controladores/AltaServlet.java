@@ -1,3 +1,5 @@
+//AltaServlet.java
+
 package com.ipartek.jonBarnes.controladores;
 
 import java.io.IOException;
@@ -13,7 +15,15 @@ import com.ipartek.jonBarnes.DAL.UsuarioYaExistenteDALException;
 import com.ipartek.jonBarnes.DAL.UsuariosDAL;
 import com.ipartek.jonBarnes.tipos.Usuario;
 
-//@WebServlet("/alta")
+/**
+ * 
+ * Servlet para dar de alta a usuarios.
+ * 
+ * @author jon Barnes
+ * @version 24/05/2017
+ *
+ */
+// @WebServlet("/alta")
 public class AltaServlet extends HttpServlet {
 	/* package */static final String USUARIOS_DAL = "dal";
 

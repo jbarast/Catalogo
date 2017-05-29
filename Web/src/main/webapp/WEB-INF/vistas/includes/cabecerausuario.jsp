@@ -1,4 +1,4 @@
-<%--cabeceraadmin.jsp --%>
+<%--cabecerausuario.jsp --%>
 
 <%--
      Cabeceras para las jsp que no son admin.
