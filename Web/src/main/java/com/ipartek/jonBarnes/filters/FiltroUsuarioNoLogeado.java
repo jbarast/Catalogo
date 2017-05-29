@@ -55,7 +55,7 @@ public class FiltroUsuarioNoLogeado implements Filter {
 		String username;
 
 		if (usuario == null) {
-			username = null;
+			username = "";
 		} else {
 			username = usuario.getNombre();
 		}
@@ -67,17 +67,16 @@ public class FiltroUsuarioNoLogeado implements Filter {
 		// Para sacar la URI:
 		String path = req.getRequestURI();
 
-		// Miramos que existe un usuario.
-		// if (username == null) {
-		// System.out.println("Intruso");
-		// }
+		// Miramos la ruta que cogemos.
 
-		if (username == null && !(path.equals("/login"))) {
+		// Para mirar el path.
+		if (username == "" && !(path.equals("/login"))) {
 			res.sendRedirect("/login");
 
 		}
-		// pass the request along the filter chain
+
 		chain.doFilter(request, response);
+
 	}
 
 	/**

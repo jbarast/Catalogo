@@ -6,6 +6,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.apache.log4j.Logger;
+
 import com.ipartek.jonBarnes.DAL.ProductoDALFactory;
 import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
 import com.ipartek.jonBarnes.DAL.UsuarioDALFactory;
@@ -23,6 +25,9 @@ import com.ipartek.jonBarnes.tipos.Usuario;
  */
 public class Listener implements ServletContextListener {
 
+	// Para hacer el log4j.
+	private static Logger log = Logger.getLogger(Listener.class);
+
 	/**
 	 * 
 	 */
@@ -34,6 +39,8 @@ public class Listener implements ServletContextListener {
 	 * Creamos la lista de usuarios, de la dal.
 	 */
 	public void contextInitialized(ServletContextEvent sce) {
+
+		log.info("Aplicacion inicializada:");
 
 		ServletContext application = sce.getServletContext();
 
@@ -52,6 +59,9 @@ public class Listener implements ServletContextListener {
 
 			application.setAttribute("dal", dalRename);
 
+			// Para indicar que los usuarios han sido creados.
+			log.info("Lista de usuarios inicializada.");
+
 		}
 
 		// Para poroductos.
@@ -68,6 +78,9 @@ public class Listener implements ServletContextListener {
 			dalProductos.altaProducto(new ProductoStockImagen());
 
 			application.setAttribute("dalProductos", dalProductos);
+
+			// Para indicar que los usuarios han sido inicializados.
+			log.info("Lista de productos inicializada.");
 
 		}
 

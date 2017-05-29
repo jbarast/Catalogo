@@ -10,8 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import com.ipartek.jonBarnes.DAL.UsuarioDALFactory;
 import com.ipartek.jonBarnes.DAL.UsuariosDAL;
+import com.ipartek.jonBarnes.listeners.Listener;
 import com.ipartek.jonBarnes.tipos.Usuario;
 
 //@WebServlet("/login")
@@ -25,6 +28,9 @@ public class LoginServlet extends HttpServlet {
 	public static final int TIEMPO_INACTIVIDAD = 30 * 60;
 
 	/* package */static final int MINIMO_CARACTERES = 4;
+
+	// Para hacer el log4j.
+	private static Logger log = Logger.getLogger(Listener.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -90,6 +96,7 @@ public class LoginServlet extends HttpServlet {
 		} else if (esUsuarioYaRegistrado) {
 			// request.getRequestDispatcher(RUTA_PRINCIPAL).forward(request,
 			// response);
+			log.info("Usuario ya registrado.");
 			response.sendRedirect("/productocrud");
 		} else if (sinParametros) {
 			request.getRequestDispatcher(RUTA_LOGIN).forward(request, response);
@@ -103,6 +110,8 @@ public class LoginServlet extends HttpServlet {
 			// response.sendRedirect("principal.jsp");
 			// request.getRequestDispatcher(RUTA_PRINCIPAL).forward(request,
 			// response);
+
+			log.info(String.format("Inicio de session de %s.", usuario.getNombre()));
 			response.sendRedirect("/productocrud");
 
 		} else {
