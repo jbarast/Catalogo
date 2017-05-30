@@ -1,3 +1,5 @@
+//LoginServlet.java
+
 package com.ipartek.jonBarnes.controladores;
 
 import java.io.IOException;
@@ -16,10 +18,19 @@ import com.ipartek.jonBarnes.DAL.UsuarioDALFactory;
 import com.ipartek.jonBarnes.DAL.UsuariosDAL;
 import com.ipartek.jonBarnes.tipos.Usuario;
 
-//@WebServlet("/login")
+/**
+ * 
+ * Servlet para el login de los usuarios.
+ * 
+ * @author jbarast
+ * @version 30/05/2017
+ *
+ */
+// @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	// TODO llevarlos a constantes globales.
 	/* package */static final String RUTA = "/WEB-INF/vistas/";
 	private static final String RUTA_PRINCIPAL = RUTA + "productocrud.jsp";
 	private static final String RUTA_LOGIN = RUTA + "login.jsp";
@@ -31,10 +42,16 @@ public class LoginServlet extends HttpServlet {
 	// Para hacer el log4j.
 	private static Logger log = Logger.getLogger(LoginServlet.class);
 
+	/**
+	 * Metodo doGet, que lo que hace es llamar el metod doPost.
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
 	}
 
+	/**
+	 * Metodo doPost
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
 

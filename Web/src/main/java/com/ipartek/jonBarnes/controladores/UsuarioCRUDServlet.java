@@ -1,3 +1,5 @@
+//UsuarioCRUDServlet.java
+
 package com.ipartek.jonBarnes.controladores;
 
 import java.io.IOException;
@@ -12,23 +14,43 @@ import com.ipartek.jonBarnes.DAL.UsuarioDALFactory;
 import com.ipartek.jonBarnes.DAL.UsuariosDAL;
 import com.ipartek.jonBarnes.tipos.Usuario;
 
-//@WebServlet("/usuariocrud")
+/**
+ * 
+ * Servlet que muestra una lista de usuarios.
+ * 
+ * @author jon Barnes
+ * @version 24/05/2017
+ *
+ */
+// @WebServlet("/usuariocrud")
 public class UsuarioCRUDServlet extends HttpServlet {
+
+	// Rutas.
+	// TODO meterla en constantes globales.
 	static final String RUTA_FORMULARIO = "/WEB-INF/vistas/usuarioform.jsp";
 	static final String RUTA_LISTADO = "/WEB-INF/vistas/usuariocrud.jsp";
 	static final String RUTA_SERVLET_LISTADO = "/usuariocrud";
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * El metodo doGet llama a un metodo doPost.
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
 	}
 
+	/**
+	 * Metodo doPost.
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
+
+		// Recogemos los datos de la aplicacion.
 		ServletContext application = getServletContext();
 		UsuariosDAL dal = (UsuariosDAL) application.getAttribute("dal");
 
+		// Si no hay usuarios los crea. Por si el listener no a funcionado.
 		if (dal == null) {
 			dal = UsuarioDALFactory.getUsuariosDAL();
 
@@ -38,8 +60,10 @@ public class UsuarioCRUDServlet extends HttpServlet {
 			application.setAttribute("dal", dal);
 		}
 
+		// Miramos la operacion a realiczar.
 		String op = request.getParameter("op");
 
+		// Sin peracion. Mostramos todos los usuarios.
 		if (op == null) {
 
 			Usuario[] usuarios = dal.buscarTodosLosUsuarios();
@@ -52,6 +76,8 @@ public class UsuarioCRUDServlet extends HttpServlet {
 
 			Usuario usuario;
 
+			// Operacion a realizar, modificar, borrar o dar de alta a un
+			// usuario.
 			switch (op) {
 			case "modificar":
 			case "borrar":

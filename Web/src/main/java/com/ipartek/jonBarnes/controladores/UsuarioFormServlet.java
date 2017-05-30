@@ -1,3 +1,5 @@
+//UsuarioFormServlet.java
+
 package com.ipartek.jonBarnes.controladores;
 
 import java.io.IOException;
@@ -15,45 +17,59 @@ import com.ipartek.jonBarnes.DAL.DALException;
 import com.ipartek.jonBarnes.DAL.UsuariosDAL;
 import com.ipartek.jonBarnes.tipos.Usuario;
 
-//@WebServlet("/usuarioform")
+/**
+ * 
+ * Servlet para la gestion de modificacion, borrado y alta de usuarios.
+ * 
+ * @author jon Barnes
+ * @version 24/05/2017
+ *
+ */
+// @WebServlet("/usuarioform")
 public class UsuarioFormServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	// Para hacer el log4j.
 	private static Logger log = Logger.getLogger(UsuarioFormServlet.class);
 
+	/**
+	 * El metodo doGet llama a un metodo doPost.
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
 	}
 
+	/**
+	 * Metodo doPost.
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
+
+		// Operacion a realizar.
 		String op = request.getParameter("opform");
 
+		// Datos del objeto que queremos modificar, borrar o dar de alta.
 		String nombre = request.getParameter("nombre");
 		String pass = request.getParameter("pass");
 		String pass2 = request.getParameter("pass2");
 
+		// rutas. //TODO Ponerlo que dependa de constantes globales.
 		RequestDispatcher rutaListado = request.getRequestDispatcher(UsuarioCRUDServlet.RUTA_SERVLET_LISTADO);
 		RequestDispatcher rutaFormulario = request.getRequestDispatcher(UsuarioCRUDServlet.RUTA_FORMULARIO);
 
-		// response.setContentType("text/plain");
-		// PrintWriter out = response.getWriter();
-		// out.println(op);
-		// out.println(nombre);
-		// out.println(pass);
-		// out.println(pass2);
-
+		// Operacion nula, mostrar listado de usuarios.
 		if (op == null) {
 			rutaListado.forward(request, response);
 			return;
 		}
 
+		// Cogemos el objeto de la aplicacion, usuario.
 		Usuario usuario = new Usuario(nombre, pass);
 
 		ServletContext application = getServletContext();
 		UsuariosDAL dal = (UsuariosDAL) application.getAttribute("dal");
 
+		// Operaciones.
 		switch (op) {
 		case "alta":
 			if (pass.equals(pass2)) {
@@ -61,9 +77,11 @@ public class UsuarioFormServlet extends HttpServlet {
 				// Indicamos que usuario se da de alta.
 				log.info(String.format("Registrado el usuario %s.", nombre));
 
+				// Damos de alta al usuario-
 				dal.alta(usuario);
 				rutaListado.forward(request, response);
 			} else {
+				// Que hacer si las contraseñas no coinciden.
 				usuario.setErrores("Las contraseñas no coinciden");
 				request.setAttribute("usuario", usuario);
 				rutaFormulario.forward(request, response);
@@ -77,8 +95,9 @@ public class UsuarioFormServlet extends HttpServlet {
 					// Indicamos que usuario a sido modificado.
 					log.info(String.format("Modificado el usuario %s.", nombre));
 
+					// Modificamos el usuario.
 					dal.modificar(usuario);
-				} catch (DALException de) {
+				} catch (DALException de) { // Error.
 					usuario.setErrores(de.getMessage());
 					request.setAttribute("usuario", usuario);
 					rutaFormulario.forward(request, response);
@@ -86,6 +105,7 @@ public class UsuarioFormServlet extends HttpServlet {
 				}
 				rutaListado.forward(request, response);
 			} else {
+				// Contraseñas no coinciden.
 				usuario.setErrores("Las contraseñas no coinciden");
 				request.setAttribute("usuario", usuario);
 				rutaFormulario.forward(request, response);
