@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 
 import com.ipartek.jonBarnes.DAL.UsuarioDALFactory;
 import com.ipartek.jonBarnes.DAL.UsuariosDAL;
+import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
 import com.ipartek.jonBarnes.tipos.Usuario;
 
 /**
@@ -29,15 +30,6 @@ import com.ipartek.jonBarnes.tipos.Usuario;
 // @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-	// TODO llevarlos a constantes globales.
-	/* package */static final String RUTA = "/WEB-INF/vistas/";
-	private static final String RUTA_PRINCIPAL = RUTA + "productocrud.jsp";
-	private static final String RUTA_LOGIN = RUTA + "login.jsp";
-
-	public static final int TIEMPO_INACTIVIDAD = 30 * 60;
-
-	/* package */static final int MINIMO_CARACTERES = 4;
 
 	// Para hacer el log4j.
 	private static Logger log = Logger.getLogger(LoginServlet.class);
@@ -80,10 +72,10 @@ public class LoginServlet extends HttpServlet {
 		// usuarioDAL.alta(new Usuario("javi", "lete"));
 
 		HttpSession session = request.getSession();
-		session.setMaxInactiveInterval(TIEMPO_INACTIVIDAD);
+		session.setMaxInactiveInterval(ConstantesGlobales.TIEMPO_INACTIVIDAD);
 
 		Cookie cookie = new Cookie("JSESSIONID", session.getId());
-		cookie.setMaxAge(TIEMPO_INACTIVIDAD);
+		cookie.setMaxAge(ConstantesGlobales.TIEMPO_INACTIVIDAD);
 		response.addCookie(cookie);
 
 		// for (Cookie cookie : request.getCookies()) {
@@ -102,8 +94,9 @@ public class LoginServlet extends HttpServlet {
 
 		boolean quiereSalir = "logout".equals(opcion);
 
-		boolean nombreValido = usuario.getNombre() != null && usuario.getNombre().length() >= MINIMO_CARACTERES;
-		boolean passValido = !(usuario.getPass() == null || usuario.getPass().length() < MINIMO_CARACTERES);
+		boolean nombreValido = usuario.getNombre() != null
+				&& usuario.getNombre().length() >= ConstantesGlobales.MINIMO_CARACTERES;
+		boolean passValido = !(usuario.getPass() == null || usuario.getPass().length() < ConstantesGlobales.MINIMO_CARACTERES);
 
 		// Redirigir a una nueva vista
 		if (quiereSalir) {
@@ -113,19 +106,19 @@ public class LoginServlet extends HttpServlet {
 
 			// Finalizamos la sesion.
 			session.invalidate();
-			request.getRequestDispatcher(RUTA_LOGIN).forward(request, response);
+			request.getRequestDispatcher(ConstantesGlobales.RUTA_LOGIN).forward(request, response);
 		} else if (esUsuarioYaRegistrado) {
 			// request.getRequestDispatcher(RUTA_PRINCIPAL).forward(request,
 			// response);
 			log.info("Usuario ya registrado.");
 			response.sendRedirect("/productocrud");
 		} else if (sinParametros) {
-			request.getRequestDispatcher(RUTA_LOGIN).forward(request, response);
+			request.getRequestDispatcher(ConstantesGlobales.RUTA_LOGIN).forward(request, response);
 		} else if (!nombreValido || !passValido) {
-			usuario.setErrores("El nombre y la pass deben tener como mínimo " + MINIMO_CARACTERES
+			usuario.setErrores("El nombre y la pass deben tener como mínimo " + ConstantesGlobales.MINIMO_CARACTERES
 					+ " caracteres y son ambos requeridos");
 			request.setAttribute("usuario", usuario);
-			request.getRequestDispatcher(RUTA_LOGIN).forward(request, response);
+			request.getRequestDispatcher(ConstantesGlobales.RUTA_LOGIN).forward(request, response);
 		} else if (esValido) {
 			session.setAttribute("usuario", usuario);
 			// response.sendRedirect("principal.jsp");
@@ -138,7 +131,7 @@ public class LoginServlet extends HttpServlet {
 		} else {
 			usuario.setErrores("El usuario y contraseña introducidos no son válidos");
 			request.setAttribute("usuario", usuario);
-			request.getRequestDispatcher(RUTA_LOGIN).forward(request, response);
+			request.getRequestDispatcher(ConstantesGlobales.RUTA_LOGIN).forward(request, response);
 		}
 	}
 }

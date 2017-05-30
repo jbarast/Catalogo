@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 
 import com.ipartek.jonBarnes.DAL.DALException;
 import com.ipartek.jonBarnes.DAL.UsuariosDAL;
+import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
 import com.ipartek.jonBarnes.tipos.Usuario;
 
 /**
@@ -54,8 +55,8 @@ public class UsuarioFormServlet extends HttpServlet {
 		String pass2 = request.getParameter("pass2");
 
 		// rutas. //TODO Ponerlo que dependa de constantes globales.
-		RequestDispatcher rutaListado = request.getRequestDispatcher(UsuarioCRUDServlet.RUTA_SERVLET_LISTADO);
-		RequestDispatcher rutaFormulario = request.getRequestDispatcher(UsuarioCRUDServlet.RUTA_FORMULARIO);
+		RequestDispatcher rutaListado = request.getRequestDispatcher(ConstantesGlobales.RUTA_SERVLET_LISTADO_USUARIO);
+		RequestDispatcher rutaFormulario = request.getRequestDispatcher(ConstantesGlobales.RUTA_FORMULARIO_USUARIO);
 
 		// Operacion nula, mostrar listado de usuarios.
 		if (op == null) {

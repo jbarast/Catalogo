@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ipartek.jonBarnes.DAL.UsuarioDALFactory;
 import com.ipartek.jonBarnes.DAL.UsuarioYaExistenteDALException;
 import com.ipartek.jonBarnes.DAL.UsuariosDAL;
+import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
 import com.ipartek.jonBarnes.tipos.Usuario;
 
 /**
@@ -29,7 +30,7 @@ public class AltaServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	/* package */static final String RUTA_ALTA = LoginServlet.RUTA + "alta.jsp";
+	/* package */static final String RUTA_ALTA = ConstantesGlobales.RUTA + "alta.jsp";
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -56,7 +57,7 @@ public class AltaServlet extends HttpServlet {
 		if (hayDatos) {
 			if (!datosCorrectos) {
 				usuario.setErrores("Todos los campos son requeridos y con un mínimo de "
-						+ LoginServlet.MINIMO_CARACTERES + " caracteres");
+						+ ConstantesGlobales.MINIMO_CARACTERES + " caracteres");
 				request.setAttribute("usuario", usuario);
 			} else if (!passIguales) {
 				usuario.setErrores("Las contraseñas deben ser iguales");
@@ -85,7 +86,7 @@ public class AltaServlet extends HttpServlet {
 	}
 
 	private boolean validarCampo(String campo) {
-		return campo != null && campo.length() >= LoginServlet.MINIMO_CARACTERES;
+		return campo != null && campo.length() >= ConstantesGlobales.MINIMO_CARACTERES;
 	}
 
 }

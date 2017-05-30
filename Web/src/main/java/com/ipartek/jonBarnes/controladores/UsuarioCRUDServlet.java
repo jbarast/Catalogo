@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ipartek.jonBarnes.DAL.UsuarioDALFactory;
 import com.ipartek.jonBarnes.DAL.UsuariosDAL;
+import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
 import com.ipartek.jonBarnes.tipos.Usuario;
 
 /**
@@ -24,12 +25,6 @@ import com.ipartek.jonBarnes.tipos.Usuario;
  */
 // @WebServlet("/usuariocrud")
 public class UsuarioCRUDServlet extends HttpServlet {
-
-	// Rutas.
-	// TODO meterla en constantes globales.
-	static final String RUTA_FORMULARIO = "/WEB-INF/vistas/usuarioform.jsp";
-	static final String RUTA_LISTADO = "/WEB-INF/vistas/usuariocrud.jsp";
-	static final String RUTA_SERVLET_LISTADO = "/usuariocrud";
 
 	private static final long serialVersionUID = 1L;
 
@@ -70,7 +65,7 @@ public class UsuarioCRUDServlet extends HttpServlet {
 
 			request.setAttribute("usuarios", usuarios);
 
-			request.getRequestDispatcher(RUTA_LISTADO).forward(request, response);
+			request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_USUARIO).forward(request, response);
 		} else {
 			String id = request.getParameter("id");
 
@@ -84,10 +79,10 @@ public class UsuarioCRUDServlet extends HttpServlet {
 				usuario = dal.buscarPorId(id);
 				request.setAttribute("usuario", usuario);
 			case "alta":
-				request.getRequestDispatcher(RUTA_FORMULARIO).forward(request, response);
+				request.getRequestDispatcher(ConstantesGlobales.RUTA_FORMULARIO_USUARIO).forward(request, response);
 				break;
 			default:
-				request.getRequestDispatcher(RUTA_LISTADO).forward(request, response);
+				request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_USUARIO).forward(request, response);
 			}
 		}
 	}

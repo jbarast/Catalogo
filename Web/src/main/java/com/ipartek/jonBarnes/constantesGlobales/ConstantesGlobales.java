@@ -25,8 +25,21 @@ public class ConstantesGlobales {
 	public static final String RUTA_LISTADO_PRODUCTOS_USUARIO = RUTA + "listaproductos.jsp";
 	public static final String RUTA_SERVLET_LISTADO_PRODUCTOS_USUARIO = "/listaproductos";
 
-	// Variable del producto.
+	// Rutas par LoginServlet
 
 	public static final String PRODUCTO = "ProductoStockImagen";
+
+	public static final String RUTA_PRINCIPAL = RUTA + "productocrud.jsp";
+	public static final String RUTA_LOGIN = RUTA + "login.jsp";
+
+	public static final int TIEMPO_INACTIVIDAD = 30 * 60;
+
+	public static final int MINIMO_CARACTERES = 4;
+
+	// Rutas usuario crud
+
+	public static final String RUTA_FORMULARIO_USUARIO = "/WEB-INF/vistas/usuarioform.jsp";
+	public static final String RUTA_LISTADO_USUARIO = "/WEB-INF/vistas/usuariocrud.jsp";
+	public static final String RUTA_SERVLET_LISTADO_USUARIO = "/usuariocrud";
 
 }

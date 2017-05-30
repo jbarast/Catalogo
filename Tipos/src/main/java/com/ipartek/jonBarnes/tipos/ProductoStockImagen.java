@@ -33,6 +33,7 @@ public class ProductoStockImagen extends Producto {
 
 	public ProductoStockImagen() {
 		super();
+		this.setPrecio("0");
 		this.stock = "0";
 		this.rutaImagen = "img/sinfoto.jpg";
 	}
