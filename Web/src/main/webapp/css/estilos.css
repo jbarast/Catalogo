@@ -18,10 +18,13 @@ input {
 nav {
     background-color: lightcyan;
     padding: 1em;
+    
+    text-align: rigth;
 }
 
 ul {
-    padding-left: 0;
+   padding-left: 0;
+    
 }
 
 li {
@@ -51,6 +54,11 @@ input[type=submit] {
 header, footer {
 	background-color: lightgray;
 	padding: 1em;
+	
+	text-align : center;
+    
+    
+    
 }
 
 fieldset {
@@ -71,3 +79,4 @@ td{
 	
 	
 }
+

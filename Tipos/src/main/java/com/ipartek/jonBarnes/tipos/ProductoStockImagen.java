@@ -23,7 +23,7 @@ public class ProductoStockImagen extends Producto {
 		this.stock = stock;
 
 		if (rutaImagen == null || rutaImagen == "") {
-			this.rutaImagen = "img/sinfoto.jpg";
+			this.rutaImagen = "http://localhost:8080/img/sinfoto.jpg";
 			// this.rutaImagen =
 			// "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJNbqspyYdsDdipH8XWIm5QzxA58g6TBaALNZt3i0pEB4ZexDbnVvYEPY";
 		} else {

@@ -78,6 +78,13 @@ public class FiltroSesiones implements Filter {
 		// Miramos la ruta que cogemos.
 
 		// Para mirar el path.
+
+		// para que carge sin problemas el css.
+		if (path.equals("/css/estilos.css")) {
+			chain.doFilter(request, response);
+			return;
+		}
+
 		if (username == "" && !(path.equals("/login"))) {
 
 			// Ponemos mensaje de intruso.
