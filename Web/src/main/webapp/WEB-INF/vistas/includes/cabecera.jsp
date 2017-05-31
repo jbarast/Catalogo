@@ -18,7 +18,8 @@
 <head>
 <meta charset="UTF-8" />
 <title>Ejercicio Tienda</title>
-<link rel="stylesheet" href="css/estilos.css" />
+<%--<link rel="stylesheet" href="css/estilos.css" /> --%>
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/estilos.css"></link>
 <script src="js/funciones.js"></script>
 </head>
 
