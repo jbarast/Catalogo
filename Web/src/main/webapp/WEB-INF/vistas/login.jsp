@@ -11,7 +11,7 @@
 
 
 <%--Cargamos la cabecera --%>
-<%@ include file="includes/cabecerausuario.jsp" %>
+<%@ include file="includes/cabeceralogin.jsp" %>
 
 <%--Para el encoding. --%>
 <%@ page contentType="text/html; charset=UTF-8" %>

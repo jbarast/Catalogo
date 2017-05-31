@@ -1,9 +1,9 @@
 <%--cabecerausuario.jsp --%>
 
 <%--
-     Cabeceras para las jsp de admin, no aparezca nada.
+     Cabeceras para las jsp que no son admin.
      Autor: jonBarnes
-     Version: 31/05/2017
+     Version: 09/05/2017
   
 
  --%>
@@ -32,5 +32,10 @@
 		<p>La mejor tienda online de productos unicos.</p>
 	</header>
 	<nav>
+		<ul>
+			
+			<%--Botones en la parte superior. --%>
+			<a href="login?opcion=logout">Logout</a>
 		
+		</ul>
 	</nav>
