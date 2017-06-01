@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.ipartek.jonBarnes.DAL.ProductoDALFactory;
 import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
@@ -53,6 +54,13 @@ public class ListaProductosServlet extends HttpServlet {
 		ServletContext applicationProductos = getServletContext();
 		ProductoDALInterface dalProductos = (ProductoDALInterface) applicationProductos.getAttribute("dalProductos");
 
+		// Leemos datos de la session.
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
+
+		HttpSession session = ((HttpServletRequest) request).getSession();
+		ProductoDALInterface dalCarrito = (ProductoDALInterface) session.getAttribute("dalCarrito");
+
 		// Miramos que la dalProductos no este vacia.
 		if (dalProductos == null) {
 
@@ -62,6 +70,13 @@ public class ListaProductosServlet extends HttpServlet {
 			// dalProductos.altaProducto(new ProductoStockImagen());
 
 			applicationProductos.setAttribute("dalProductos", dalProductos);
+		}
+
+		// Miramos que dalCarrito no este vacio.
+		if (dalCarrito == null) {
+
+			// Creamos el carrito.
+			dalCarrito = ProductoDALFactory.getProductos();
 		}
 
 		ProductoStockImagen[] productos = dalProductos.buscarTodosLosProductos();

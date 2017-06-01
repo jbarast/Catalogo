@@ -9,16 +9,7 @@
 
 <!-- Indicamos la pagina de inicio de la apliacion.-->
  
-  <context-para>
-      <param-name>
-          org.eclipse.jetty.servlet.Default.welcomeServlets
-      </param-name>
-      <param-name>true</param-name>
-  </context-para>
-  <welcome-file-list>
-  	<welcome-file>      com.ipartek.jonBarnes.controladores.LoginServlet
- </welcome-file>
-  </welcome-file-list>
+  
  
  <!--Filtros--> 
   <filter>
@@ -106,6 +97,14 @@
     </servlet-class>
   </servlet>
   
+  
+  <servlet>
+    <servlet-name>listaproductosform</servlet-name>
+    <servlet-class>
+      com.ipartek.jonBarnes.controladores.ListaProductosFormServlet
+    </servlet-class>
+  </servlet>
+  
   <servlet-mapping>
     <servlet-name>productocrud</servlet-name>
     <url-pattern>/productocrud</url-pattern>
@@ -140,6 +139,10 @@
   <servlet-mapping>
     <servlet-name>alta</servlet-name>
     <url-pattern>/alta</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>listaproductosform</servlet-name>
+  	<url-pattern>/listaproductosform</url-pattern>
   </servlet-mapping>
   
   
