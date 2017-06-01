@@ -46,7 +46,7 @@
 				<td>${producto.precio} €</td>
 				<td>${producto.stock}</td>
 				<td><IMG src="${producto.rutaImagen}" width="100" height="100"/></td>
-				<td><a class="boton_personalizado" href="/listaproductos?op=anadir&id=${producto.nombre}">Comprar</a></td>
+				<td><a class="boton_personalizado" href="/listaproductosform?op=anadir&id=${producto.nombre}">Comprar</a></td>
 				
 			</tr>
 		</c:forEach>

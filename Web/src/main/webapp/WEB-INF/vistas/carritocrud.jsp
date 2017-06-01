@@ -19,7 +19,7 @@
 
 
 <%--Titulo --%>
-<h2>Mantenimiento de productos.</h2>
+<h2>Carrito</h2>
 <%--Tabla --%>
 <table border="1">
 
@@ -38,23 +38,26 @@
 	<tbody>
 	
 	<%--Bucle de lectura de elementos de la tienda. --%>
-		<c:forEach items="${requestScope.productos}" var="producto">
+		<c:forEach items="${sessionScope.carrito}" var="productoCarrito">
 			<tr>
 				<td>
-					<a href="?op=modificar&id=${producto.nombre}">Modificar</a>
-					<a href="?op=borrar&id=${producto.nombre}">Borrar</a>
+					<a href="?op=modificar&id=${productoCarrito.nombre}">Modificar</a>
+					<a href="?op=borrar&id=${productoCarrito.nombre}">Borrar</a>
 				</td>
-				<td>${producto.id}</td>
-				<td>${producto.nombre}</td>
-				<td>${producto.descripcion}</td>
-				<td>${producto.precio} €</td>
-				<td>${producto.stock}</td>
-				<td><IMG src="${producto.rutaImagen}" width="100" height="100"/></td>
+				<td>${productoCarrito.id}</td>
+				<td>${productoCarrito.nombre}</td>
+				<td>${productoCarrito.descripcion}</td>
+				<td>${productoCarrito.precio} €</td>
+				<td>${productoCarrito.stock}</td>
+				<td><IMG src="${productoCarrito.rutaImagen}" width="100" height="100"/></td>
+				
 				
 			</tr>
 		</c:forEach>
 	</tbody>
 </table>
+
+<c:out value="${sessionScope.carrito}"/>				
 
 
 

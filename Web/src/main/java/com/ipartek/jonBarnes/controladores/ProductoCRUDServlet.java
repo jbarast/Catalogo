@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.ipartek.jonBarnes.DAL.ProductoDALFactory;
 import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
 import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
@@ -26,6 +28,8 @@ import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
 // @WebServlet("/productocrud")
 public class ProductoCRUDServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	// Para hacer el log4j.
+	private static Logger log = Logger.getLogger(ProductoCRUDServlet.class);
 
 	/**
 	 * 
@@ -74,6 +78,11 @@ public class ProductoCRUDServlet extends HttpServlet {
 		if (op == null) {
 
 			ProductoStockImagen[] productos = dalProductos.buscarTodosLosProductos();
+			// Miramos como da el dato.
+			// Por si queremos ver los productos que tenemos en el log.
+			for (int i = 0; i < productos.length; i++) {
+				log.info(String.format("Que tiene el carrito?? %s", productos[i]));
+			}
 			request.setAttribute("productos", productos);
 			request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO).forward(request, response);
 		} else {
