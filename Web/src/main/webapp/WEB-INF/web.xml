@@ -6,7 +6,13 @@
 
 
   <display-name>Archetype Created Web Application</display-name>
-  
+
+<!-- Indicamos la pagina de inicio de la apliacion.-->
+  <welcome-file-list>
+  	<welcome-file> /login </welcome-file>
+  </welcome-file-list>
+ 
+ <!--Filtros--> 
   <filter>
   	<description>
   	</description>
@@ -36,11 +42,13 @@
     
   
   
-  
+  <!--Listener-->
   <listener>
   	<listener-class>com.ipartek.jonBarnes.listeners.Listener</listener-class>
   </listener>
-  
+
+
+<!--Mapeo de los servlets-->  
   <servlet>
     <servlet-name>productocrud</servlet-name>
     <servlet-class>
