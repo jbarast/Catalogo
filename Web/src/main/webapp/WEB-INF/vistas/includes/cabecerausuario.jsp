@@ -32,5 +32,8 @@
 		<p>La mejor tienda online de productos unicos.</p>
 	</header>
 	<nav>
-		
+	<ul>
+	<%--Botones en la parte superior. --%>
+			<a href="login?opcion=logout">Logout</a>
+		</ul>
 	</nav>

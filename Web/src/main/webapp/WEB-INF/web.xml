@@ -8,8 +8,16 @@
   <display-name>Archetype Created Web Application</display-name>
 
 <!-- Indicamos la pagina de inicio de la apliacion.-->
+ 
+  <context-para>
+      <param-name>
+          org.eclipse.jetty.servlet.Default.welcomeServlets
+      </param-name>
+      <param-name>true</param-name>
+  </context-para>
   <welcome-file-list>
-  	<welcome-file> /login </welcome-file>
+  	<welcome-file>      com.ipartek.jonBarnes.controladores.LoginServlet
+ </welcome-file>
   </welcome-file-list>
  
  <!--Filtros--> 

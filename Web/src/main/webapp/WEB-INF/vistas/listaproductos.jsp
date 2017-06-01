@@ -32,6 +32,7 @@
 			<th>Precio</th>
 			<th>Stock</th>
 			<th>Imagen Producto</th>
+			<th>Añadir al carrito</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -45,6 +46,7 @@
 				<td>${producto.precio} €</td>
 				<td>${producto.stock}</td>
 				<td><IMG src="${producto.rutaImagen}" width="100" height="100"/></td>
+				<td><a class="boton_personalizado" href="/listaproductos?SinTerminar">Comprar</a></td>
 				
 			</tr>
 		</c:forEach>
