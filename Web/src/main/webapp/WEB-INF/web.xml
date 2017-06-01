@@ -47,7 +47,7 @@
   </listener>
 
 
-<!--Mapeo de los servlets-->  
+<!-- servlets-->  
   <servlet>
     <servlet-name>productocrud</servlet-name>
     <servlet-class>
@@ -105,6 +105,14 @@
     </servlet-class>
   </servlet>
   
+   <servlet>
+    <servlet-name>carritocrud</servlet-name>
+    <servlet-class>
+      com.ipartek.jonBarnes.controladores.CarritoCRUDServlet
+    </servlet-class>
+  </servlet>
+  
+  <!-- Mapeo de las servlets. -->
   <servlet-mapping>
     <servlet-name>productocrud</servlet-name>
     <url-pattern>/productocrud</url-pattern>
@@ -143,6 +151,11 @@
   <servlet-mapping>
   	<servlet-name>listaproductosform</servlet-name>
   	<url-pattern>/listaproductosform</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+  	<servlet-name>carritocrud</servlet-name>
+  	<url-pattern>/carritocrud</url-pattern>
   </servlet-mapping>
   
   

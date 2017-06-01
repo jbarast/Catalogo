@@ -34,6 +34,8 @@
 	<nav>
 	<ul>
 	<%--Botones en la parte superior. --%>
+			<a href="listaproductos">Lista Productos</a>
+			<a href="carritocrud">Carrito</a>
 			<a href="login?opcion=logout">Logout</a>
 		</ul>
 	</nav>

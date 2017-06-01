@@ -41,6 +41,9 @@
 			<li><a href="usuarioform?op=alta">Alta Usuarios</a></li>
 			<li><a href="usuariocrud">Mantenimiento usuarios</a></li>
 			
+			<li><a href="listaproductos">Vista usuario</a></li>
+			<li><a href="carritocrud">Carrito</a></li>
+			
 			<li><a href="login?opcion=logout">Logout</a></li>
 		
 		</ul>
