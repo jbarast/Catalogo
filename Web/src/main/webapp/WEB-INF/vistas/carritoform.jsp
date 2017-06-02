@@ -8,7 +8,7 @@
  --%>
 
 <%--Cabecera --%>
-<%@ include file="includes/cabecera.jsp" %>
+<%@ include file="includes/cabecerausuario.jsp" %>
 
 <%--Para el encoding. --%>
 <%@ page contentType="text/html; charset=UTF-8" %>
@@ -26,7 +26,7 @@ ${producto}
 
 	
 	<%--Llamamos a clases. --%>
-	<jsp:useBean id="producto" scope="request"
+	<jsp:useBean id="carrito" scope="request"
 		class="com.ipartek.jonBarnes.tipos.ProductoStockImagen" />
 
 
@@ -39,7 +39,7 @@ ${producto}
 			<label for="nombre">Nombre</label> 
 			
 			<input id="nombre" name="nombre"
-			  required="required"  value="${producto.nombre}" 
+			  required="required"  value="${carrito.nombre}" 
 			  
 			  <c:if test="${param.op == 'modificar' or param.op == 'borrar'}">
 			  	readonly="readonly"

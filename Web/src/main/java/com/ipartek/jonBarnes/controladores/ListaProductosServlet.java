@@ -13,10 +13,11 @@ import javax.servlet.http.HttpSession;
 
 import com.ipartek.jonBarnes.DAL.ProductoDALFactory;
 import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
-import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
-import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
 //Las rutas.
 //Mis imports.
+import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
+import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
+import com.ipartek.jonBarnes.tipos.Usuario;
 
 /**
  * Servlet para listaproductos.jsp
@@ -61,6 +62,9 @@ public class ListaProductosServlet extends HttpServlet {
 		HttpSession session = ((HttpServletRequest) request).getSession();
 		ProductoDALInterface dalCarrito = (ProductoDALInterface) session.getAttribute("dalCarrito");
 
+		// Miramos la operacion a realiczar.
+		String op = request.getParameter("op");
+
 		// Miramos que la dalProductos no este vacia.
 		if (dalProductos == null) {
 
@@ -78,10 +82,49 @@ public class ListaProductosServlet extends HttpServlet {
 			// Creamos el carrito.
 			dalCarrito = ProductoDALFactory.getProductos();
 		}
+		// ////////**************///////////////
 
-		ProductoStockImagen[] productos = dalProductos.buscarTodosLosProductos();
-		request.setAttribute("productos", productos);
-		request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_PRODUCTOS_USUARIO).forward(request, response);
+		// Creamos un producto.
 
+		ProductoStockImagen producto;
+
+		// Sin peracion. Mostramos todos los usuarios.
+		if (op == null) {
+
+			ProductoStockImagen[] productos = dalProductos.buscarTodosLosProductos();
+
+			request.setAttribute("productos", productos);
+
+			request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_PRODUCTOS_USUARIO).forward(request, response);
+		} else {
+			String id = request.getParameter("id");
+
+			Usuario usuario;
+
+			// Operacion a realizar, modificar, borrar o dar de alta a un
+			// usuario.
+			switch (op) {
+			case "modificar":
+			case "borrar":
+				producto = dalProductos.buscarProductoPorId(id);
+				request.setAttribute("producto", producto);
+			case "alta":
+				request.getRequestDispatcher(ConstantesGlobales.RUTA_FORMULARIO_PRODUCTOS_USUARIO).forward(request,
+						response);
+				break;
+			default:
+				request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_PRODUCTOS_USUARIO).forward(request,
+						response);
+			}
+
+			// /////////**************//////////
+			// Lo siguiente esta bien, codigo del medio cambiado.
+			// ProductoStockImagen[] productos =
+			// dalProductos.buscarTodosLosProductos();
+			// request.setAttribute("productos", productos);
+			// request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_PRODUCTOS_USUARIO).forward(request,
+			// response);
+
+		}
 	}
 }

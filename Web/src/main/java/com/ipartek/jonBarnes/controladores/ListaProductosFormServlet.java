@@ -62,10 +62,6 @@ public class ListaProductosFormServlet extends HttpServlet {
 
 			dalCarrito = ProductoDALFactory.getProductos();
 
-			// Creamos unos productos de prueba.
-			// dalCarrito.altaProducto(new ProductoStockImagen()); // Uno de
-			// muestra.
-
 		}
 
 		// Miramos que no saques dalCarrito.
@@ -97,7 +93,8 @@ public class ListaProductosFormServlet extends HttpServlet {
 		// Miramos si op es null.
 		// Si lo es, que vuelva a lista de productos.
 		if (op == null) {
-			request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_PRODUCTOS_USUARIO).forward(request, response);
+			request.getRequestDispatcher(ConstantesGlobales.RUTA_SERVLET_LISTADO_PRODUCTOS_USUARIO).forward(request,
+					response);
 
 			return;
 		}
@@ -127,7 +124,8 @@ public class ListaProductosFormServlet extends HttpServlet {
 				return;
 
 			}
-			request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_CARRITO).forward(request, response);
+			request.getRequestDispatcher(ConstantesGlobales.RUTA_SERVLET_LISTADO_PRODUCTOS_USUARIO).forward(request,
+					response);
 
 		}
 

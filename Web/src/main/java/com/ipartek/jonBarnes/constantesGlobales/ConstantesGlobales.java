@@ -25,6 +25,9 @@ public class ConstantesGlobales {
 	public static final String RUTA_LISTADO_PRODUCTOS_USUARIO = RUTA + "listaproductos.jsp";
 	public static final String RUTA_SERVLET_LISTADO_PRODUCTOS_USUARIO = "/listaproductos";
 
+	public static final String RUTA_FORMULARIO_PRODUCTOS_USUARIO = RUTA + "listaproductosform.jsp";
+	public static final String RUTA_SERVLET_FORMULARIO_PRODUCTOS_USUARIO = "/listaproductosform";
+
 	// Rutas par LoginServlet
 
 	public static final String PRODUCTO = "ProductoStockImagen";
