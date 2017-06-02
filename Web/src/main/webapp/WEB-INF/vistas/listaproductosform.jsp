@@ -3,7 +3,7 @@
 
   Controlador de añadir productos al carrito.
   autor: jonBarnes
-  version: 01/06/2017
+  version: 02/06/2017
 
  --%>
 
@@ -18,6 +18,13 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 	<%--Redirige a la servlet de lista de productos --%>
+	
+	<h2>Formulario de productos</h2>
+	
+	<%--Llamamos a clases. --%>
+	<jsp:useBean id="producto" scope="request"
+		class="com.ipartek.jonBarnes.tipos.ProductoStockImagen" />
+	
 
 		
 

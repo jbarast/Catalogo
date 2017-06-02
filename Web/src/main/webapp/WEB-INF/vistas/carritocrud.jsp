@@ -41,8 +41,8 @@
 		<c:forEach items="${sessionScope.carrito}" var="productoCarrito">
 			<tr>
 				<td>
-					<a href="?op=modificar&id=${productoCarrito.nombre}">Modificar</a>
-					<a href="?op=borrar&id=${productoCarrito.nombre}">Borrar</a>
+					
+					<a href="carritoform?op=borrar&id=${productoCarrito.nombre}">Borrar</a>
 				</td>
 				<td>${productoCarrito.id}</td>
 				<td>${productoCarrito.nombre}</td>
@@ -57,7 +57,7 @@
 	</tbody>
 </table>
 
-<c:out value="${sessionScope.carrito}"/>				
+				
 
 
 

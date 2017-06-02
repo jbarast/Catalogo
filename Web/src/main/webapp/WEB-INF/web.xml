@@ -112,6 +112,13 @@
     </servlet-class>
   </servlet>
   
+  <servlet>
+    <servlet-name>carritoform</servlet-name>
+    <servlet-class>
+      com.ipartek.jonBarnes.controladores.CarritoFormServlet
+    </servlet-class>
+  </servlet>
+  
   <!-- Mapeo de las servlets. -->
   <servlet-mapping>
     <servlet-name>productocrud</servlet-name>
@@ -156,6 +163,11 @@
   <servlet-mapping>
   	<servlet-name>carritocrud</servlet-name>
   	<url-pattern>/carritocrud</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+  	<servlet-name>carritoform</servlet-name>
+  	<url-pattern>/carritoform</url-pattern>
   </servlet-mapping>
   
   

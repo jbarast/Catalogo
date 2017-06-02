@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import com.ipartek.jonBarnes.DAL.DALException;
 import com.ipartek.jonBarnes.DAL.ProductoDALFactory;
 import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
 import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
@@ -23,14 +22,14 @@ import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
  * Servlet para la opcion de añadir productos a los carritos.
  * 
  * @author jon Barnes
- * @version 01/06/2017
+ * @version 02/06/2017
  * 
  */
-public class ListaProductosFormServlet extends HttpServlet {
+public class CarritoFormServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	// Para hacer el log4j.
-	private static Logger log = Logger.getLogger(ListaProductosFormServlet.class);
+	private static Logger log = Logger.getLogger(CarritoFormServlet.class);
 
 	/**
 	 * Llamamos al metodo doPost().
@@ -86,13 +85,13 @@ public class ListaProductosFormServlet extends HttpServlet {
 		// Miramos que id coge de producto.
 		log.info(String.format("Producot: %s", idProducto));
 		// Producto que vamos a utilizar.
-		ProductoStockImagen productoAnadirCarrito;// = new
+		ProductoStockImagen productoBorrarCarrito;// = new
 													// ProductoStockImagen();
 		// Buscamos el producto en el dalProductos.
-		productoAnadirCarrito = dalProductos.buscarProductoPorId(idProducto);
+		productoBorrarCarrito = dalProductos.buscarProductoPorId(idProducto);
 
 		// Producto que vamos a añadir.
-		log.info(String.format("productoAnadirCarrito: %s ", productoAnadirCarrito));
+		log.info(String.format("productoAnadirCarrito: %s ", productoBorrarCarrito));
 
 		// Miramos si op es null.
 		// Si lo es, que vuelva a lista de productos.
@@ -102,32 +101,13 @@ public class ListaProductosFormServlet extends HttpServlet {
 			return;
 		}
 
-		if (op.startsWith("anadir")) {
-			try {
+		if (op.startsWith("borrar")) {
+			// Indicamos que producto se a dado de alta.
+			log.info(String.format("Objeto %s borrado de la tienda.", productoBorrarCarrito.getNombre()));
 
-				// Damos de alta el producto.
-				dalCarrito.altaProducto(productoAnadirCarrito);
-				// Miramos si nos mete bien el producto.
-				log.info(String.format("dalCarrito desdpues de alta: %s", dalCarrito));
-				// Para saber lo que hay dentro del Array.
-				ProductoStockImagen[] carrito = dalCarrito.buscarTodosLosProductos();
-
-				for (int i = 0; i < carrito.length; i++) {
-					log.info(String.format("Que tiene el carrito?? %s", carrito[i]));
-				}
-
-				// Guardamos el dato.
-
-				session.setAttribute("dalCarrito", dalCarrito);
-
-			} catch (DALException de) {
-				productoAnadirCarrito.setErrores("El producto ya existe");
-				request.setAttribute("producto", productoAnadirCarrito);
-				request.getRequestDispatcher("?op=anadir").forward(request, response);
-				return;
-
-			}
-			request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_CARRITO).forward(request, response);
+			// Borramos el producto.
+			dalProductos.borrarProducto(productoBorrarCarrito);
+			request.getRequestDispatcher(ConstantesGlobales.RUTA_SERVLET_LISTADO_CARRITO).forward(request, response);
 
 		}
 
