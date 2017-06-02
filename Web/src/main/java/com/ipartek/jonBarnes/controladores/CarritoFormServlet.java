@@ -101,12 +101,12 @@ public class CarritoFormServlet extends HttpServlet {
 			return;
 		}
 
-		if (op.startsWith("borrar")) {
+		if (op.equals("borrar")) {
 			// Indicamos que producto se a dado de alta.
-			log.info(String.format("Objeto %s borrado de la tienda.", productoBorrarCarrito.getNombre()));
+			log.info(String.format("Objeto %s borrado del carrito.", productoBorrarCarrito.getNombre()));
 
 			// Borramos el producto.
-			dalProductos.borrarProducto(productoBorrarCarrito);
+			dalCarrito.borrarProducto(productoBorrarCarrito);
 			request.getRequestDispatcher(ConstantesGlobales.RUTA_SERVLET_LISTADO_CARRITO).forward(request, response);
 
 		}
