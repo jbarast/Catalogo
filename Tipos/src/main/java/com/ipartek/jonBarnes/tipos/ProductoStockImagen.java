@@ -66,7 +66,10 @@ public class ProductoStockImagen extends Producto {
 
 	@Override
 	public String toString() {
-		return "ProductoStockImagen [stock=" + stock + ", rutaImagen=" + rutaImagen + "]";
+
+		return String.format("Producto %d [ Nombre: %s, Descripcion: %s , Precio: %f , Stock: %d, Imagen: %s]",
+				super.getId(), super.getNombre(), super.getDescripcion(), super.getPrecio(), this.stock,
+				this.rutaImagen);
 	}
 
 	@Override
