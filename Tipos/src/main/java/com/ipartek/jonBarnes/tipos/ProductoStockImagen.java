@@ -13,12 +13,11 @@ package com.ipartek.jonBarnes.tipos;
 public class ProductoStockImagen extends Producto {
 
 	// Atributos nuevos.
-	private String stock;
+	private int stock;
 	private String rutaImagen;
 
 	// Constructor.
-	public ProductoStockImagen(String id, String nombre, String descripcion, String precio, String stock,
-			String rutaImagen) {
+	public ProductoStockImagen(int id, String nombre, String descripcion, double precio, int stock, String rutaImagen) {
 		super(id, nombre, descripcion, precio);
 		this.stock = stock;
 
@@ -33,25 +32,25 @@ public class ProductoStockImagen extends Producto {
 
 	public ProductoStockImagen() {
 		super();
-		this.setPrecio("0");
-		this.stock = "0";
+		this.setPrecio(0.00);
+		this.stock = 0;
 		this.rutaImagen = "img/sinfoto.jpg";
 	}
 
-	public ProductoStockImagen(String id, String nombre, String descripcion, String precio) {
+	public ProductoStockImagen(int id, String nombre, String descripcion, double precio) {
 		super(id, nombre, descripcion, precio);
 
-		this.stock = "0";
+		this.stock = 0;
 		this.rutaImagen = "img/sinfoto.jpg";
 	}
 
 	// Getters y setters.
 
-	public String getStock() {
+	public int getStock() {
 		return stock;
 	}
 
-	public void setStock(String stock) {
+	public void setStock(int stock) {
 		this.stock = stock;
 	}
 
@@ -75,7 +74,7 @@ public class ProductoStockImagen extends Producto {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((rutaImagen == null) ? 0 : rutaImagen.hashCode());
-		result = prime * result + ((stock == null) ? 0 : stock.hashCode());
+		result = prime * result + stock;
 		return result;
 	}
 
@@ -93,10 +92,7 @@ public class ProductoStockImagen extends Producto {
 				return false;
 		} else if (!rutaImagen.equals(other.rutaImagen))
 			return false;
-		if (stock == null) {
-			if (other.stock != null)
-				return false;
-		} else if (!stock.equals(other.stock))
+		if (stock != other.stock)
 			return false;
 		return true;
 	}
