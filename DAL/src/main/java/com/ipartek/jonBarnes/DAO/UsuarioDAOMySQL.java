@@ -306,4 +306,23 @@ public class UsuarioDAOMySQL extends IpartekDAOMySQL implements UsuarioDAO {
 		}
 	}
 
+	public boolean validar(Usuario usuario) {
+
+		// variables necesarios.
+		boolean usuarioValido = false;
+		Usuario usuarioBD = null;
+
+		// Sacamos el usuario de la base de datos si lo saca.
+		usuarioBD = this.findById(usuario.getId());
+
+		// Miramos si son iguales.
+		if (usuario.equals(usuarioBD)) {
+			usuarioValido = true;
+		}
+
+		// True si existe false si no.
+		return usuarioValido;
+
+	}
+
 }

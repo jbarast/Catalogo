@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ipartek.jonBarnes.DAL.UsuarioDALFactory;
-import com.ipartek.jonBarnes.DAL.UsuariosDAL;
+import com.ipartek.jonBarnes.DAO.UsuarioDAOMySQL;
+import com.ipartek.jonBarnes.DAO.interfaces.UsuarioDAO;
 import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
 import com.ipartek.jonBarnes.tipos.Usuario;
 
@@ -25,6 +25,9 @@ import com.ipartek.jonBarnes.tipos.Usuario;
  */
 // @WebServlet("/usuariocrud")
 public class UsuarioCRUDServlet extends HttpServlet {
+
+	// Creamos la dao.
+	public static UsuarioDAO daoUsuarios = null;
 
 	private static final long serialVersionUID = 1L;
 
@@ -41,19 +44,12 @@ public class UsuarioCRUDServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
 
+		// DAO.
+		daoUsuarios = new UsuarioDAOMySQL("jdbc:mysql://localhost/ipartek", "root", "");
+
 		// Recogemos los datos de la aplicacion.
 		ServletContext application = getServletContext();
-		UsuariosDAL dal = (UsuariosDAL) application.getAttribute("dal");
-
-		// Si no hay usuarios los crea. Por si el listener no a funcionado.
-		if (dal == null) {
-			dal = UsuarioDALFactory.getUsuariosDAL();
-
-			dal.alta(new Usuario("usuario1", "pass1"));
-			dal.alta(new Usuario("usuario2", "pass2"));
-
-			application.setAttribute("dal", dal);
-		}
+		UsuarioDAOMySQL dal = (UsuarioDAOMySQL) application.getAttribute("dal");
 
 		// Miramos la operacion a realiczar.
 		String op = request.getParameter("op");
@@ -61,7 +57,14 @@ public class UsuarioCRUDServlet extends HttpServlet {
 		// Sin peracion. Mostramos todos los usuarios.
 		if (op == null) {
 
-			Usuario[] usuarios = dal.buscarTodosLosUsuarios();
+			// Abrimos la conexion.
+			daoUsuarios.abrirConexion();
+
+			// Cogemos todos los usuarios.
+			Usuario[] usuarios = dal.findAll();
+
+			// Cerramos la conexion.
+			daoUsuarios.cerrarConexion();
 
 			request.setAttribute("usuarios", usuarios);
 
@@ -72,11 +75,14 @@ public class UsuarioCRUDServlet extends HttpServlet {
 			Usuario usuario;
 
 			// Operacion a realizar, modificar, borrar o dar de alta a un
+			// ABro la conexion.
+			daoUsuarios.abrirConexion();
 			// usuario.
 			switch (op) {
 			case "modificar":
 			case "borrar":
-				usuario = dal.buscarPorId(id);
+				usuario = dal.findById(Integer.parseInt(id));
+				daoUsuarios.cerrarConexion();
 				request.setAttribute("usuario", usuario);
 			case "alta":
 				request.getRequestDispatcher(ConstantesGlobales.RUTA_FORMULARIO_USUARIO).forward(request, response);

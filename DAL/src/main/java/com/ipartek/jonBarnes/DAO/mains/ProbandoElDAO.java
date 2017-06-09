@@ -2,8 +2,6 @@
 
 package com.ipartek.jonBarnes.DAO.mains;
 
-import java.sql.Connection;
-
 import com.ipartek.jonBarnes.DAO.ProductoDAOMySQL;
 import com.ipartek.jonBarnes.DAO.UsuarioDAOMySQL;
 import com.ipartek.jonBarnes.DAO.interfaces.ProductoDAO;
@@ -23,7 +21,8 @@ public class ProbandoElDAO {
 	// Creamos la dao.
 	public static UsuarioDAO daoUsuarios = null;
 	public static ProductoDAO daoProductos = null;
-	public static Connection con = null;
+
+	// public static Connection con = null;
 
 	public static void main(String[] args) {
 

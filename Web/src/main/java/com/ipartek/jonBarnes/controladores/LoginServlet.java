@@ -15,16 +15,17 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import com.ipartek.jonBarnes.DAL.UsuarioDALFactory;
-import com.ipartek.jonBarnes.DAL.UsuariosDAL;
+import com.ipartek.jonBarnes.DAO.UsuarioDAOMySQL;
+import com.ipartek.jonBarnes.DAO.interfaces.UsuarioDAO;
 import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
 import com.ipartek.jonBarnes.tipos.Usuario;
 
 /**
  * 
- * Servlet para el login de los usuarios.
+ * Servlet para el login de los usuarios con DAO.
  * 
  * @author jbarast
- * @version 30/05/2017
+ * @version 09/06/2017
  *
  */
 // @WebServlet("/login")
@@ -33,6 +34,9 @@ public class LoginServlet extends HttpServlet {
 
 	// Para hacer el log4j.
 	private static Logger log = Logger.getLogger(LoginServlet.class);
+
+	// Creamos la dao.
+	public static UsuarioDAO daoUsuarios = null;
 
 	/**
 	 * Metodo doGet, que lo que hace es llamar el metod doPost.
@@ -47,6 +51,8 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
 
+		// DAO
+		daoUsuarios = new UsuarioDAOMySQL("jdbc:mysql://localhost/ipartek", "root", "");
 		// Recoger datos de vistas
 		String nombre = request.getParameter("nombre");
 		String pass = request.getParameter("pass");
@@ -55,13 +61,16 @@ public class LoginServlet extends HttpServlet {
 
 		// Crear modelos en base a los datos
 		Usuario usuario = new Usuario();
-		usuario.setNombre(nombre);
-		usuario.setPass(pass);
+		usuario.setUsername(nombre);
+		usuario.setPassword(pass);
+
+		// abrimos la conexin.
+		daoUsuarios.abrirConexion();
 
 		// Llamada a lógica de negocio
 		ServletContext application = getServletContext();
 
-		UsuariosDAL usuariosDAL = (UsuariosDAL) application.getAttribute(AltaServlet.USUARIOS_DAL);
+		UsuarioDAOMySQL usuariosDAL = (UsuarioDAOMySQL) application.getAttribute(AltaServlet.USUARIOS_DAL);
 
 		if (usuariosDAL == null) {
 			usuariosDAL = UsuarioDALFactory.getUsuariosDAL();
@@ -88,21 +97,24 @@ public class LoginServlet extends HttpServlet {
 		// ESTADOS
 		boolean esValido = usuariosDAL.validar(usuario);
 
-		boolean sinParametros = usuario.getNombre() == null;
+		boolean sinParametros = usuario.getUsername() == null;
 
 		boolean esUsuarioYaRegistrado = session.getAttribute("usuario") != null;
 
 		boolean quiereSalir = "logout".equals(opcion);
 
-		boolean nombreValido = usuario.getNombre() != null
-				&& usuario.getNombre().length() >= ConstantesGlobales.MINIMO_CARACTERES;
-		boolean passValido = !(usuario.getPass() == null || usuario.getPass().length() < ConstantesGlobales.MINIMO_CARACTERES);
+		boolean nombreValido = usuario.getUsername() != null
+				&& usuario.getUsername().length() >= ConstantesGlobales.MINIMO_CARACTERES;
+		boolean passValido = !(usuario.getPassword() == null || usuario.getPassword().length() < ConstantesGlobales.MINIMO_CARACTERES);
+
+		// Cerramos la conexion.
+		daoUsuarios.cerrarConexion(); // TODO mirar si esta bien aqui.
 
 		// Redirigir a una nueva vista
 		if (quiereSalir) {
 
 			// Indicamos quien sale de la session.
-			log.info(String.format("Fin de sesion de %s.", usuario.getNombre()));
+			log.info(String.format("Fin de sesion de %s.", usuario.getUsername()));
 
 			// Finalizamos la sesion.
 			session.invalidate();
@@ -125,13 +137,14 @@ public class LoginServlet extends HttpServlet {
 			// request.getRequestDispatcher(RUTA_PRINCIPAL).forward(request,
 			// response);
 
-			log.info(String.format("Inicio de session de %s.", usuario.getNombre()));
+			log.info(String.format("Inicio de session de %s.", usuario.getUsername()));
 			response.sendRedirect("/productocrud");
 
 		} else {
 			usuario.setErrores("El usuario y contraseña introducidos no son válidos");
 			request.setAttribute("usuario", usuario);
 			request.getRequestDispatcher(ConstantesGlobales.RUTA_LOGIN).forward(request, response);
+
 		}
 	}
 }

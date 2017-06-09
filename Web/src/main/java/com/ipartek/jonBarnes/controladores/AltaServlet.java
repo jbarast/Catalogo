@@ -11,10 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ipartek.jonBarnes.DAL.UsuarioDALFactory;
-import com.ipartek.jonBarnes.DAL.UsuarioYaExistenteDALException;
-import com.ipartek.jonBarnes.DAL.UsuariosDAL;
+import com.ipartek.jonBarnes.DAO.UsuarioDAOMySQL;
 import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
-import com.ipartek.jonBarnes.tipos.Usuario;
 
 /**
  * 
@@ -48,7 +46,7 @@ public class AltaServlet extends HttpServlet {
 		// Las contraseñas deben ser iguales
 		// Datos correctos: guardar
 
-		Usuario usuario = new Usuario(nombre, pass);
+		UsuarioDAOMySQL usuario = new UsuarioDAOMySQL(nombre, pass);
 
 		boolean hayDatos = nombre != null && pass != null && pass2 != null;
 		boolean datosCorrectos = validarCampo(nombre) && validarCampo(pass) && validarCampo(pass2);

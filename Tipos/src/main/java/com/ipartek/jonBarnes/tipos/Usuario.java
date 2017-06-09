@@ -2,7 +2,6 @@
 
 package com.ipartek.jonBarnes.tipos;
 
-
 /**
  * 
  * Clase usuario. Para el ejemplo de JDBC.
@@ -19,6 +18,7 @@ public class Usuario {
 	private String nombre_completo;
 	private String password;
 	private String username;
+	private String errores;
 
 	// Constructores.
 
@@ -83,6 +83,15 @@ public class Usuario {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	// // Errores
+	public String getErrores() {
+		return errores;
+	}
+
+	public void setErrores(String errores) {
+		this.errores = errores;
 	}
 
 	// otros metodos.
