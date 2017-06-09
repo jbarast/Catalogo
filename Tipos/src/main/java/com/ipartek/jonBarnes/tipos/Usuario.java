@@ -2,72 +2,112 @@
 
 package com.ipartek.jonBarnes.tipos;
 
+
 /**
  * 
- * Clase Usuario.
+ * Clase usuario. Para el ejemplo de JDBC.
  * 
- * @author jonBarnes
- * @version 24/05/2017
+ * @author jbarast
+ * @version 07/06/2017
  *
  */
 public class Usuario {
 
 	// atributos.
-	private String nombre, pass, errores;
+	private int id;
+	private int id_roles;
+	private String nombre_completo;
+	private String password;
+	private String username;
 
 	// Constructores.
-	public Usuario(String nombre, String pass) {
+
+	// //Constructor completo.
+	public Usuario(int id, int id_roles, String nombre_completo, String password, String username) {
 		super();
-		this.nombre = nombre;
-		this.pass = pass;
+		this.id = id;
+		this.id_roles = id_roles;
+		this.nombre_completo = nombre_completo;
+		this.password = password;
+		this.username = username;
 	}
 
+	// //Constructo vacio.
 	public Usuario() {
-		this("", "");
+		super();
+
 	}
 
 	// getters y setters.
 
-	public String getNombre() {
-		return nombre;
+	// //Id
+	public int getId() {
+		return id;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setId(int id) {
+		this.id = id;
 	}
 
-	public String getPass() {
-		return pass;
+	// // Id_roles
+	public int getId_roles() {
+		return id_roles;
 	}
 
-	public void setPass(String pass) {
-		this.pass = pass;
+	public void setId_roles(int id_roles) {
+		this.id_roles = id_roles;
 	}
 
-	public String getErrores() {
-		return errores;
+	// // Nombre_completo
+	public String getNombre_completo() {
+		return nombre_completo;
 	}
 
-	public void setErrores(String errores) {
-		this.errores = errores;
+	public void setNombre_completo(String nombre_completo) {
+		this.nombre_completo = nombre_completo;
 	}
 
-	// Otros metodos.
+	// // password
+	public String getPassword() {
+		return password;
+	}
 
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	// // username
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	// otros metodos.
+
+	// // toString
 	@Override
 	public String toString() {
-		return "Usuario [nombre=" + nombre + ", pass=" + pass + "]";
+		return "Usuario [id=" + id + ", id_roles=" + id_roles + ", nombre_completo=" + nombre_completo + ", password="
+				+ password + ", username=" + username + "]";
 	}
 
+	// //hashCode
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
-		result = prime * result + ((pass == null) ? 0 : pass.hashCode());
+		result = prime * result + id;
+		result = prime * result + id_roles;
+		result = prime * result + ((nombre_completo == null) ? 0 : nombre_completo.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
 
+	// //equals
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -77,15 +117,24 @@ public class Usuario {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		if (nombre == null) {
-			if (other.nombre != null)
-				return false;
-		} else if (!nombre.equals(other.nombre))
+		if (id != other.id)
 			return false;
-		if (pass == null) {
-			if (other.pass != null)
+		if (id_roles != other.id_roles)
+			return false;
+		if (nombre_completo == null) {
+			if (other.nombre_completo != null)
 				return false;
-		} else if (!pass.equals(other.pass))
+		} else if (!nombre_completo.equals(other.nombre_completo))
+			return false;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
+			return false;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
 			return false;
 		return true;
 	}
