@@ -386,27 +386,29 @@ public class UsuarioDAOMySQL extends IpartekDAOMySQL implements UsuarioDAO {
 		// Sacamos el usuario de la base de datos si lo saca.
 
      if(usuario.getUsername() != null) {
-		 System.out.println("el usuario no es null");
-		 System.out.println(usuario.getUsername());
-		 usuarioBD = this.findbyUsername(usuario.getUsername());
-		 System.out.println(usuarioBD);
+
+
+
+		 if(this.findbyUsername((usuario.getUsername()))!=null){
+
+			 usuarioBD = this.findbyUsername(usuario.getUsername());
 
 		 if (usuarioBD.getUsername() != null) {
 
 			 //Sacamos el username y la contraseña.
 			 String contraseñaBD = usuarioBD.getPassword();
-			 System.out.println(contraseñaBD);
 			 String usernameBD = usuarioBD.getUsername();
-			 System.out.println(usernameBD);
+
+
 
 			 // Miramos si son iguales.
-			 if (contraseñaBD.equals(usuario.getUsername()) && usernameBD.equals(usuario.getPassword())) {
+			 if (contraseñaBD.equals(usuario.getPassword()) && usernameBD.equals(usuario.getUsername())) {
 				 usuarioValido = true;
 			 }
 		 }
-	 }
+	 }}
 		// True si existe false si no.
-		System.out.println(usuarioValido);
+
 		return usuarioValido;
 
 	}
