@@ -166,6 +166,17 @@ public class UsuarioDAOMySQL extends IpartekDAOMySQL implements UsuarioDAO {
 
 			System.out.println(username);
 
+			System.out.println(psFindByUsername);
+			System.out.println(FIND_BY_USERNAME);
+			System.out.println(con);
+
+			abrirConexion();
+
+			System.out.println(con);
+
+
+
+
 			psFindByUsername = con.prepareStatement(FIND_BY_USERNAME);
 
 			System.out.println("Hola");
