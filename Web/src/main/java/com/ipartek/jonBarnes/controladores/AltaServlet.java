@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ipartek.jonBarnes.DAL.UsuarioDALFactory;
 import com.ipartek.jonBarnes.DAO.UsuarioDAOMySQL;
+import com.ipartek.jonBarnes.DAO.interfaces.UsuarioDAO;
 import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
+import com.ipartek.jonBarnes.tipos.Usuario;
 
 /**
  * 
@@ -41,38 +43,43 @@ public class AltaServlet extends HttpServlet {
 		String pass2 = request.getParameter("pass2");
 
 		// Inicio sin datos: mostrar formulario
-		// Datos incorrectos: sin rellenar, límite de caracteres, no coinciden
-		// contraseñas
-		// Las contraseñas deben ser iguales
+		// Datos incorrectos: sin rellenar, lï¿½mite de caracteres, no coinciden
+		// contraseï¿½as
+		// Las contraseï¿½as deben ser iguales
 		// Datos correctos: guardar
 
-		UsuarioDAOMySQL usuario = new UsuarioDAOMySQL(nombre, pass);
+		Usuario usuario = new Usuario();
+		usuario.setUsername(nombre);
+		usuario.setPassword(pass);
+
+
 
 		boolean hayDatos = nombre != null && pass != null && pass2 != null;
 		boolean datosCorrectos = validarCampo(nombre) && validarCampo(pass) && validarCampo(pass2);
 		boolean passIguales = pass != null && pass.equals(pass2);
 
+		//La operacion de alta.
 		if (hayDatos) {
 			if (!datosCorrectos) {
-				usuario.setErrores("Todos los campos son requeridos y con un mínimo de "
+				usuario.setErrores("Todos los campos son requeridos y con un mï¿½nimo de "
 						+ ConstantesGlobales.MINIMO_CARACTERES + " caracteres");
 				request.setAttribute("usuario", usuario);
 			} else if (!passIguales) {
-				usuario.setErrores("Las contraseñas deben ser iguales");
+				usuario.setErrores("Las contraseï¿½as deben ser iguales");
 				request.setAttribute("usuario", usuario);
 			} else {
 				ServletContext application = getServletContext();
 
-				UsuariosDAL usuariosDAL = (UsuariosDAL) application.getAttribute(USUARIOS_DAL);
+				UsuarioDAO usuariosDAL = (UsuarioDAO) application.getAttribute(USUARIOS_DAL);
 
 				if (usuariosDAL == null) {
 					usuariosDAL = UsuarioDALFactory.getUsuariosDAL();
 				}
 
 				try {
-					usuariosDAL.alta(usuario);
-				} catch (UsuarioYaExistenteDALException de) {
-					usuario.setNombre("");
+					usuariosDAL.insert(usuario);
+				} catch (Exception de) {
+					usuario.setUsername("");
 					usuario.setErrores("El usuario ya existe. Elige otro");
 					request.setAttribute("usuario", usuario);
 				}

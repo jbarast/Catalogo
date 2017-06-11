@@ -27,6 +27,7 @@ public class UsuarioDAOMySQL extends IpartekDAOMySQL implements UsuarioDAO {
 
 	private final static String FIND_ALL = "SELECT*FROM usuarios";
 	private final static String FIND_BY_ID = "SELECT*FROM usuarios WHERE id=?";
+	private final static String FIND_BY_USERNAME = "SELECT*FROM usuarios WHERE username=?";
 	private final static String INSERT = "INSERT INTO usuarios(username,password,nombre_completo,id_roles) VALUES (?,?,?,?)";
 	private final static String UPDATE = "UPDATE usuarios SET username=?,password=?, nombre_completo=?, id_roles=? WHERE id=?";
 	private final static String DELETE = "DELETE FROM usuarios WHERE id = ?";
@@ -35,6 +36,7 @@ public class UsuarioDAOMySQL extends IpartekDAOMySQL implements UsuarioDAO {
 
 	private PreparedStatement psFindAll;
 	private PreparedStatement psFindByID;
+	private PreparedStatement psFindByUsername;
 	private PreparedStatement psInsert;
 	private PreparedStatement psUpdate;
 	private PreparedStatement psDelete;
@@ -143,6 +145,62 @@ public class UsuarioDAOMySQL extends IpartekDAOMySQL implements UsuarioDAO {
 		}
 
 		return usuario;
+	}
+
+
+	/**
+	 * Para buscar un usuario apartir del username.
+	 * @param username
+	 * @return El usuario.
+	 */
+	public Usuario findbyUsername(String username){
+
+		// Creamos el usuario.
+		Usuario usuarioBD = null;
+
+		ResultSet rs = null;
+
+
+
+		try {
+
+			System.out.println(username);
+
+			psFindByUsername = con.prepareStatement(FIND_BY_USERNAME);
+
+			System.out.println("Hola");
+
+			// Metemos el id en la sentencia-
+			psFindByUsername.setString(1, username);
+
+			System.out.println(psFindByUsername);
+
+			rs = psFindByUsername.executeQuery();
+
+			// Cogemos el dato.
+			if (rs.next()) {
+
+				// Creamos el objeto de usuario.
+				usuarioBD = new Usuario();
+
+				// Metemos los datos recogidos.
+				usuarioBD.setId(rs.getInt("id"));
+				usuarioBD.setId_roles(rs.getInt("id_roles"));
+				usuarioBD.setNombre_completo(rs.getString("nombre_completo"));
+				usuarioBD.setPassword(rs.getString("password"));
+				usuarioBD.setUsername(rs.getString("username"));
+			}
+		} catch (SQLException e) {
+
+			throw new DAOException("Error en FindByUsername", e);
+
+		} finally {
+
+			cerrar(psFindByID, rs);
+		}
+
+		return usuarioBD;
+
 	}
 
 	/**
@@ -312,15 +370,32 @@ public class UsuarioDAOMySQL extends IpartekDAOMySQL implements UsuarioDAO {
 		boolean usuarioValido = false;
 		Usuario usuarioBD = null;
 
+		System.out.println(usuario);
+
 		// Sacamos el usuario de la base de datos si lo saca.
-		usuarioBD = this.findById(usuario.getId());
 
-		// Miramos si son iguales.
-		if (usuario.equals(usuarioBD)) {
-			usuarioValido = true;
-		}
+     if(usuario.getUsername() != null) {
+		 System.out.println("el usuario no es null");
+		 System.out.println(usuario.getUsername());
+		 usuarioBD = this.findbyUsername(usuario.getUsername());
+		 System.out.println(usuarioBD);
 
+		 if (usuarioBD.getUsername() != null) {
+
+			 //Sacamos el username y la contraseña.
+			 String contraseñaBD = usuarioBD.getPassword();
+			 System.out.println(contraseñaBD);
+			 String usernameBD = usuarioBD.getUsername();
+			 System.out.println(usernameBD);
+
+			 // Miramos si son iguales.
+			 if (contraseñaBD.equals(usuario.getUsername()) && usernameBD.equals(usuario.getPassword())) {
+				 usuarioValido = true;
+			 }
+		 }
+	 }
 		// True si existe false si no.
+		System.out.println(usuarioValido);
 		return usuarioValido;
 
 	}

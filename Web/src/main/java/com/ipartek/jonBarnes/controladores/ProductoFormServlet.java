@@ -10,10 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ipartek.jonBarnes.DAO.DAOException;
+import com.ipartek.jonBarnes.DAO.interfaces.ProductoDAO;
 import org.apache.log4j.Logger;
 
-import com.ipartek.jonBarnes.DAL.DALException;
-import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
+//import com.ipartek.jonBarnes.DAL.DALException;
+//import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
 import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
 import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
 
@@ -58,20 +60,24 @@ public class ProductoFormServlet extends HttpServlet {
 
 		// La "application"
 		ServletContext applicationProductos = getServletContext();
-		ProductoDALInterface dalProductos = (ProductoDALInterface) applicationProductos.getAttribute("dalProductos");
+		ProductoDAO dalProductos = (ProductoDAO) applicationProductos.getAttribute("dalProductos");
 		// op.
 		String op = request.getParameter("opform");
 
 		// Cogiendo los datos
 		String nombre = request.getParameter("nombre");
+
+		//abrimos la conexion.
+		dalProductos.abrirConexion();
+
 		// Para sacar la id.
-		ProductoStockImagen[] productos = dalProductos.buscarTodosLosProductos(); // Solo
+		ProductoStockImagen[] productos = dalProductos.findAll(); // Solo
 																					// sirve
 																					// para
 																					// el
 																					// id.
 		// String id = request.getParameter("id");
-		String id = String.valueOf(productos.length + 1);
+		//int id = String.valueOf(productos.length + 1); Mirarlo bien.
 		String descripcion = request.getParameter("descripcion");
 		String precio = request.getParameter("precio");
 		if (precio == null) {
@@ -90,17 +96,29 @@ public class ProductoFormServlet extends HttpServlet {
 
 		// Creamos el producto.
 
-		ProductoStockImagen producto = new ProductoStockImagen(id, nombre, descripcion, precio, stock, rutaImagen);
+		ProductoStockImagen producto = new ProductoStockImagen();
 
+		//producto.setId(id);
+		producto.setNombre(nombre);
+		producto.setDescripcion(descripcion);
+		producto.setPrecio(Double.parseDouble(precio));
+		producto.setStock(Integer.parseInt(stock));
+		producto.setRutaImagen(rutaImagen);
+
+
+
+
+		//Las operaciones.
+		try{
 		switch (op) {
 		case "alta":
 			try {
 				// Indicamos que producto se a dado de alta.
-				log.info(String.format("Objeto %s añadido a la tienda.", producto.getNombre()));
+				log.info(String.format("Objeto %s aï¿½adido a la tienda.", producto.getNombre()));
 
 				// Damos de alta el producto.
-				dalProductos.altaProducto(producto);
-			} catch (DALException de) {
+				dalProductos.insert(producto);
+			} catch (DAOException de) {
 				producto.setErrores("El producto ya existe");
 				request.setAttribute("producto", producto);
 				request.getRequestDispatcher("?op=alta").forward(request, response);
@@ -116,8 +134,8 @@ public class ProductoFormServlet extends HttpServlet {
 				log.info(String.format("Objeto %s modificado de la  tienda.", producto.getNombre()));
 
 				// Hacemos la modificacion.
-				dalProductos.modificarProducto(producto);
-			} catch (DALException de) {
+				dalProductos.update(producto);
+			} catch (DAOException de) {
 				producto.setErrores(de.getMessage());
 				request.setAttribute("producto", producto);
 				request.getRequestDispatcher(ConstantesGlobales.RUTA_FORMULARIO).forward(request, response);
@@ -136,10 +154,26 @@ public class ProductoFormServlet extends HttpServlet {
 			log.info(String.format("Objeto %s borrado de la tienda.", producto.getNombre()));
 
 			// Borramos el producto.
-			dalProductos.borrarProducto(producto);
+			dalProductos.delete(producto);
 			request.getRequestDispatcher(ConstantesGlobales.RUTA_SERVLET_LISTADO).forward(request, response);
 			break;
 		}
 
-	}
+	}catch (Exception e){
+			throw new DAOException("Error en las operaciones con la base de datos.",e);
+
+
+		}finally {
+
+		 //Cerramos la conexion.
+			try{
+
+				dalProductos.cerrarConexion();
+			}catch (Exception e){
+				throw new DAOException("Error en la dexconesion con la base de datos.",e);
+
+
+			}
+		}
+		}
 }

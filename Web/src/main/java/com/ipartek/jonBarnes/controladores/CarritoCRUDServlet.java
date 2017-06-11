@@ -10,10 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.ipartek.jonBarnes.DAL.CarritoDALFactory;
+import com.ipartek.jonBarnes.DAO.DAOException;
+import com.ipartek.jonBarnes.DAO.interfaces.ProductoDAO;
 import org.apache.log4j.Logger;
 
-import com.ipartek.jonBarnes.DAL.ProductoDALFactory;
-import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
+//import com.ipartek.jonBarnes.DAL.ProductoDALFactory;
+//import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
 import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
 import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
 //Las rutas.
@@ -59,7 +62,7 @@ public class CarritoCRUDServlet extends HttpServlet {
 		HttpServletResponse res = (HttpServletResponse) response;
 
 		HttpSession session = ((HttpServletRequest) request).getSession();
-		ProductoDALInterface dalCarrito = (ProductoDALInterface) session.getAttribute("dalCarrito");
+		ProductoDAO dalCarrito = (ProductoDAO) session.getAttribute("dalCarrito");
 
 		// Miramos si cogemos daltos del dalCarrito.
 		log.info(String.format("dalCarrito: %s", dalCarrito));
@@ -71,7 +74,7 @@ public class CarritoCRUDServlet extends HttpServlet {
 		// Miramos que la dalProductos no este vacia.
 		if (dalCarrito == null) {
 
-			dalCarrito = ProductoDALFactory.getProductos();
+			dalCarrito = CarritoDALFactory.getProductosDAL();
 
 			// Creamos unos productos de prueba.
 			// dalProductos.altaProducto(new ProductoStockImagen());
@@ -85,9 +88,15 @@ public class CarritoCRUDServlet extends HttpServlet {
 		log.info(String.format("Operacion a realizar: %s", op));
 		log.info(String.format("dalCarrito %s", dalCarrito));
 
+		//abrimos la conexion.
+		dalCarrito.abrirConexion();
+
+		//Las operaciones.
+		try{
+
 		if (op == null) {
 
-			ProductoStockImagen[] carrito = dalCarrito.buscarTodosLosProductos();
+			ProductoStockImagen[] carrito = dalCarrito.findAll();
 
 			// log.info(String.format("Carrito: %s", carrito.toString()));
 			// request.setAttribute("carrito", carrito);
@@ -111,7 +120,7 @@ public class CarritoCRUDServlet extends HttpServlet {
 			switch (op) {
 			case "modificar":
 			case "borrar":
-				producto = dalCarrito.buscarProductoPorId(id);
+				producto = dalCarrito.findById(Integer.parseInt(id));
 				request.setAttribute("dalCarrito", producto);
 			case "alta":
 				request.getRequestDispatcher(ConstantesGlobales.RUTA_FORMULARIO_CARRITO).forward(request, response);
@@ -120,5 +129,19 @@ public class CarritoCRUDServlet extends HttpServlet {
 				request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_CARRITO).forward(request, response);
 			}
 		}
-	}
+	}catch (Exception e){
+			throw new DAOException("Error en las operaciones con la base de datos.",e);
+
+
+		}finally {
+		//cerramos la conexion.
+			try{
+				dalCarrito.cerrarConexion();
+
+			}catch (Exception e){
+				throw new DAOException("Error en la dexconesion con la base de datos.",e);
+
+			}
+		}
+		}
 }

@@ -11,16 +11,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.ipartek.jonBarnes.DAO.DAOException;
+import com.ipartek.jonBarnes.DAO.interfaces.ProductoDAO;
 import org.apache.log4j.Logger;
 
-import com.ipartek.jonBarnes.DAL.DALException;
+// com.ipartek.jonBarnes.DAL.DALException;
 import com.ipartek.jonBarnes.DAL.ProductoDALFactory;
-import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
+//import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
 import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
 import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
 
 /**
- * Servlet para la opcion de añadir productos a los carritos.
+ * Servlet para la opcion de aï¿½adir productos a los carritos.
  * 
  * @author jon Barnes
  * @version 01/06/2017
@@ -55,12 +57,12 @@ public class ListaProductosFormServlet extends HttpServlet {
 		HttpServletResponse res = (HttpServletResponse) response;
 
 		HttpSession session = ((HttpServletRequest) request).getSession();
-		ProductoDALInterface dalCarrito = (ProductoDALInterface) session.getAttribute("dalCarrito");
+		ProductoDAO dalCarrito = (ProductoDAO) session.getAttribute("dalCarrito");
 
 		// Miramos que la dalProductos no este vacia.
 		if (dalCarrito == null) {
 
-			dalCarrito = ProductoDALFactory.getProductos();
+			dalCarrito = ProductoDALFactory.getProductosDAL();
 
 		}
 
@@ -70,25 +72,32 @@ public class ListaProductosFormServlet extends HttpServlet {
 		// Cargamos la aplicacion de productos por si acaso.
 
 		ServletContext applicationProductos = getServletContext();
-		ProductoDALInterface dalProductos = (ProductoDALInterface) applicationProductos.getAttribute("dalProductos");
+		ProductoDAO dalProductos = (ProductoDAO) applicationProductos.getAttribute("dalProductos");
 
 		// Miaramos que valor tiene dalProductos.
 		log.info(String.format("dalProductos: %s", dalProductos));
 
-		// Cargamos los datos a añadir.
+		// Cargamos los datos a aï¿½adir.
 
 		// Miramos que producto es.
-		String idProducto = request.getParameter("id");
+		int idProducto = Integer.parseInt(request.getParameter("id"));
 		// Miramos que id coge de producto.
 		log.info(String.format("Producot: %s", idProducto));
 		// Producto que vamos a utilizar.
 		ProductoStockImagen productoAnadirCarrito;// = new
 													// ProductoStockImagen();
 		// Buscamos el producto en el dalProductos.
-		productoAnadirCarrito = dalProductos.buscarProductoPorId(idProducto);
+		productoAnadirCarrito = dalProductos.findById(idProducto);
 
-		// Producto que vamos a añadir.
+		// Producto que vamos a aï¿½adir.
 		log.info(String.format("productoAnadirCarrito: %s ", productoAnadirCarrito));
+
+		//Abrimos la conexion con la base de datos.
+		dalProductos.abrirConexion();
+
+		//Las operaciones.
+		try{
+
 
 		// Miramos si op es null.
 		// Si lo es, que vuelva a lista de productos.
@@ -103,11 +112,11 @@ public class ListaProductosFormServlet extends HttpServlet {
 			try {
 
 				// Damos de alta el producto.
-				dalCarrito.altaProducto(productoAnadirCarrito);
+				dalCarrito.insert(productoAnadirCarrito);
 				// Miramos si nos mete bien el producto.
 				log.info(String.format("dalCarrito desdpues de alta: %s", dalCarrito));
 				// Para saber lo que hay dentro del Array.
-				ProductoStockImagen[] carrito = dalCarrito.buscarTodosLosProductos();
+				ProductoStockImagen[] carrito = dalCarrito.findAll();
 
 				for (int i = 0; i < carrito.length; i++) {
 					log.info(String.format("Que tiene el carrito?? %s", carrito[i]));
@@ -117,7 +126,7 @@ public class ListaProductosFormServlet extends HttpServlet {
 
 				session.setAttribute("dalCarrito", dalCarrito);
 
-			} catch (DALException de) {
+			} catch (DAOException de) {
 				productoAnadirCarrito.setErrores("El producto ya existe");
 				request.setAttribute("producto", productoAnadirCarrito);
 				request.getRequestDispatcher("?op=anadir").forward(request, response);
@@ -129,5 +138,19 @@ public class ListaProductosFormServlet extends HttpServlet {
 
 		}
 
-	}
+	}catch (Exception e){
+			throw new DAOException("Error en las operaciones con la base de datos.",e);
+
+		}finally {
+
+		        //Cerramos la conexion.
+			try{
+				dalProductos.cerrarConexion();
+
+			}catch (Exception e){
+				throw new DAOException("Error en la dexconesion con la base de datos.",e);
+
+			}
+		}
+		}
 }

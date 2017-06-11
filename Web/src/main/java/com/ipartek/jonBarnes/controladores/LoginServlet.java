@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.ipartek.jonBarnes.DAO.DAOException;
 import org.apache.log4j.Logger;
 
 import com.ipartek.jonBarnes.DAL.UsuarioDALFactory;
@@ -67,7 +68,7 @@ public class LoginServlet extends HttpServlet {
 		// abrimos la conexin.
 		daoUsuarios.abrirConexion();
 
-		// Llamada a lógica de negocio
+		// Llamada a lï¿½gica de negocio
 		ServletContext application = getServletContext();
 
 		UsuarioDAOMySQL usuariosDAL = (UsuarioDAOMySQL) application.getAttribute(AltaServlet.USUARIOS_DAL);
@@ -76,7 +77,7 @@ public class LoginServlet extends HttpServlet {
 			usuariosDAL = UsuarioDALFactory.getUsuariosDAL();
 		}
 
-		// Sólo para crear una base de datos falsa con el
+		// Sï¿½lo para crear una base de datos falsa con el
 		// contenido de un usuario "javi", "lete"
 		// usuarioDAL.alta(new Usuario("javi", "lete"));
 
@@ -94,8 +95,18 @@ public class LoginServlet extends HttpServlet {
 		// }
 		// }
 
+		//Operaciones.
+		try{
+
+			// abrimos la conexin.
+			daoUsuarios.abrirConexion();
+
+
 		// ESTADOS
+
+
 		boolean esValido = usuariosDAL.validar(usuario);
+			//boolean esValido=true; //TODO cambiarlo, es para una prueba unicamente.
 
 		boolean sinParametros = usuario.getUsername() == null;
 
@@ -107,8 +118,7 @@ public class LoginServlet extends HttpServlet {
 				&& usuario.getUsername().length() >= ConstantesGlobales.MINIMO_CARACTERES;
 		boolean passValido = !(usuario.getPassword() == null || usuario.getPassword().length() < ConstantesGlobales.MINIMO_CARACTERES);
 
-		// Cerramos la conexion.
-		daoUsuarios.cerrarConexion(); // TODO mirar si esta bien aqui.
+
 
 		// Redirigir a una nueva vista
 		if (quiereSalir) {
@@ -127,7 +137,7 @@ public class LoginServlet extends HttpServlet {
 		} else if (sinParametros) {
 			request.getRequestDispatcher(ConstantesGlobales.RUTA_LOGIN).forward(request, response);
 		} else if (!nombreValido || !passValido) {
-			usuario.setErrores("El nombre y la pass deben tener como mínimo " + ConstantesGlobales.MINIMO_CARACTERES
+			usuario.setErrores("El nombre y la pass deben tener como mï¿½nimo " + ConstantesGlobales.MINIMO_CARACTERES
 					+ " caracteres y son ambos requeridos");
 			request.setAttribute("usuario", usuario);
 			request.getRequestDispatcher(ConstantesGlobales.RUTA_LOGIN).forward(request, response);
@@ -141,10 +151,24 @@ public class LoginServlet extends HttpServlet {
 			response.sendRedirect("/productocrud");
 
 		} else {
-			usuario.setErrores("El usuario y contraseña introducidos no son válidos");
+			usuario.setErrores("El usuario y contraseï¿½a introducidos no son vï¿½lidos");
 			request.setAttribute("usuario", usuario);
 			request.getRequestDispatcher(ConstantesGlobales.RUTA_LOGIN).forward(request, response);
 
 		}
-	}
+	}catch (Exception e){
+			throw new DAOException("Error en las operacion  con la base de  datos en login.",e);
+
+
+		}finally {
+		//cerramos la conexion con la base de datos.
+			try{
+				usuariosDAL.cerrarConexion();
+
+			}catch (Exception e){
+				throw new DAOException("Error en la dexconesion con la base de datos.",e);
+
+			}
+		}
+		}
 }

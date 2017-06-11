@@ -41,8 +41,8 @@
 		<c:forEach items="${requestScope.productos}" var="producto">
 			<tr>
 				<td>
-					<a href="?op=modificar&id=${producto.nombre}">Modificar</a>
-					<a href="?op=borrar&id=${producto.nombre}">Borrar</a>
+					<a href="?op=modificar&id=${producto.id}">Modificar</a>
+					<a href="?op=borrar&id=${producto.id}">Borrar</a>
 				</td>
 				<td>${producto.id}</td>
 				<td>${producto.nombre}</td>

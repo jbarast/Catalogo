@@ -11,15 +11,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.ipartek.jonBarnes.DAL.CarritoDALFactory;
+import com.ipartek.jonBarnes.DAO.DAOException;
+import com.ipartek.jonBarnes.DAO.interfaces.ProductoDAO;
 import org.apache.log4j.Logger;
 
-import com.ipartek.jonBarnes.DAL.ProductoDALFactory;
-import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
+//import com.ipartek.jonBarnes.DAL.ProductoDALFactory;
+//import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
 import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
 import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
 
 /**
- * Servlet para la opcion de añadir productos a los carritos.
+ * Servlet para la opcion de aï¿½adir productos a los carritos.
  * 
  * @author jon Barnes
  * @version 02/06/2017
@@ -54,12 +57,12 @@ public class CarritoFormServlet extends HttpServlet {
 		HttpServletResponse res = (HttpServletResponse) response;
 
 		HttpSession session = ((HttpServletRequest) request).getSession();
-		ProductoDALInterface dalCarrito = (ProductoDALInterface) session.getAttribute("dalCarrito");
+		ProductoDAO dalCarrito = (ProductoDAO) session.getAttribute("dalCarrito");
 
 		// Miramos que la dalProductos no este vacia.
 		if (dalCarrito == null) {
 
-			dalCarrito = ProductoDALFactory.getProductos();
+			dalCarrito = CarritoDALFactory.getProductosDAL();
 
 			// Creamos unos productos de prueba.
 			// dalCarrito.altaProducto(new ProductoStockImagen()); // Uno de
@@ -73,12 +76,15 @@ public class CarritoFormServlet extends HttpServlet {
 		// Cargamos la aplicacion de productos por si acaso.
 
 		ServletContext applicationProductos = getServletContext();
-		ProductoDALInterface dalProductos = (ProductoDALInterface) applicationProductos.getAttribute("dalProductos");
+		ProductoDAO dalProductos = (ProductoDAO) applicationProductos.getAttribute("dalProductos");
+
+		//abrimos la conexion con la base de datos.
+		dalCarrito.abrirConexion();
 
 		// Miaramos que valor tiene dalProductos.
 		log.info(String.format("dalProductos: %s", dalProductos));
 
-		// Cargamos los datos a añadir.
+		// Cargamos los datos a aï¿½adir.
 
 		// Miramos que producto es.
 		String idProducto = request.getParameter("id");
@@ -86,30 +92,50 @@ public class CarritoFormServlet extends HttpServlet {
 		log.info(String.format("Producot: %s", idProducto));
 		// Producto que vamos a utilizar.
 		ProductoStockImagen productoBorrarCarrito;// = new
-													// ProductoStockImagen();
+		// ProductoStockImagen();
 		// Buscamos el producto en el dalProductos.
-		productoBorrarCarrito = dalProductos.buscarProductoPorId(idProducto);
+		productoBorrarCarrito = dalProductos.findById(Integer.parseInt(idProducto));
 
-		// Producto que vamos a añadir.
+		// Producto que vamos a aï¿½adir.
 		log.info(String.format("productoAnadirCarrito: %s ", productoBorrarCarrito));
 
 		// Miramos si op es null.
 		// Si lo es, que vuelva a lista de productos.
-		if (op == null) {
-			request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_PRODUCTOS_USUARIO).forward(request, response);
 
-			return;
+		//Las operaciones.
+		try {
+
+
+			if (op == null) {
+				request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_PRODUCTOS_USUARIO).forward(request, response);
+
+				return;
+			}
+
+			if (op.equals("borrar")) {
+				// Indicamos que producto se a dado de alta.
+				log.info(String.format("Objeto %s borrado del carrito.", productoBorrarCarrito.getNombre()));
+
+				// Borramos el producto.
+				dalCarrito.delete(productoBorrarCarrito);
+				request.getRequestDispatcher(ConstantesGlobales.RUTA_SERVLET_LISTADO_CARRITO).forward(request, response);
+
+			}
+
+		} catch (Exception e) {
+
+			throw new DAOException("Error en la dexconesion con la base de datos.", e);
+
+		} finally {
+
+			//Cerramos la conexion.
+			try {
+				dalCarrito.cerrarConexion();
+			} catch (Exception e) {
+				throw new DAOException("Error en la dexconesion con la base de datos.", e);
+
+			}
 		}
+	}}
 
-		if (op.equals("borrar")) {
-			// Indicamos que producto se a dado de alta.
-			log.info(String.format("Objeto %s borrado del carrito.", productoBorrarCarrito.getNombre()));
 
-			// Borramos el producto.
-			dalCarrito.borrarProducto(productoBorrarCarrito);
-			request.getRequestDispatcher(ConstantesGlobales.RUTA_SERVLET_LISTADO_CARRITO).forward(request, response);
-
-		}
-
-	}
-}

@@ -65,7 +65,7 @@ public class FiltroSesiones implements Filter {
 		if (usuario == null) {
 			username = "";
 		} else {
-			username = usuario.getNombre();
+			username = usuario.getUsername();
 		}
 
 		// Miramos que dato coge.

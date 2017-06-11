@@ -15,7 +15,7 @@ import com.ipartek.jonBarnes.DAO.interfaces.ProductoDAO;
 import org.apache.log4j.Logger;
 
 import com.ipartek.jonBarnes.DAL.ProductoDALFactory;
-import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
+//import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
 import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
 import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
 //Las rutas.
@@ -59,6 +59,8 @@ public class ProductoCRUDServlet extends HttpServlet {
 		ServletContext applicationProductos = getServletContext();
 		ProductoDAO dalProductos = (ProductoDAO) applicationProductos.getAttribute("dalProductos");
 
+
+
 		// Las operaciones.
 		// TODO hacerlo:
 		// https://github.com/ipartek/JavaServidorTardes/blob/master/HolaMundo/src/com/ipartek/ejemplos/javierlete/controladores/UsuarioCRUDServlet.java
@@ -66,19 +68,19 @@ public class ProductoCRUDServlet extends HttpServlet {
 		// Miramos que la dalProductos no este vacia.
 		if (dalProductos == null) {
 
+			//Cargamos los productos de la base de datos.
 			dalProductos = ProductoDALFactory.getProductosDAL();
-
-			// Creamos unos productos de prueba.
-			// dalProductos.altaProducto(new ProductoStockImagen());
 
 			applicationProductos.setAttribute("dalProductos", dalProductos);
 		}
 
+		//abrimos la conexion con la base de datos.
+		dalProductos.abrirConexion();
+
 		// Creamos op.
 		String op = request.getParameter("op");
 
-		//abrimos la conexion con la base de datos.
-		dalProductos.abrirConexion();
+
 
 		try{
 		if (op == null) {
@@ -93,7 +95,11 @@ public class ProductoCRUDServlet extends HttpServlet {
 			request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO).forward(request, response);
 		} else {
 
+			//System.out.println(request.getParameter("id"));
+
 			int id = Integer.parseInt(request.getParameter("id"));
+			//System.out.println(id);
+
 
 			ProductoStockImagen producto;
 

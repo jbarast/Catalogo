@@ -12,9 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.ipartek.jonBarnes.DAL.ProductoDALFactory;
-import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
+//import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
 //Las rutas.
 //Mis imports.
+import com.ipartek.jonBarnes.DAO.DAOException;
+import com.ipartek.jonBarnes.DAO.interfaces.ProductoDAO;
 import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
 import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
 import com.ipartek.jonBarnes.tipos.Usuario;
@@ -53,14 +55,14 @@ public class ListaProductosServlet extends HttpServlet {
 
 		// Primero recogemos los datos...??
 		ServletContext applicationProductos = getServletContext();
-		ProductoDALInterface dalProductos = (ProductoDALInterface) applicationProductos.getAttribute("dalProductos");
+		ProductoDAO dalProductos = (ProductoDAO) applicationProductos.getAttribute("dalProductos");
 
 		// Leemos datos de la session.
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 
 		HttpSession session = ((HttpServletRequest) request).getSession();
-		ProductoDALInterface dalCarrito = (ProductoDALInterface) session.getAttribute("dalCarrito");
+		ProductoDAO dalCarrito = (ProductoDAO) session.getAttribute("dalCarrito");
 
 		// Miramos la operacion a realiczar.
 		String op = request.getParameter("op");
@@ -68,7 +70,7 @@ public class ListaProductosServlet extends HttpServlet {
 		// Miramos que la dalProductos no este vacia.
 		if (dalProductos == null) {
 
-			dalProductos = ProductoDALFactory.getProductos();
+			dalProductos = ProductoDALFactory.getProductosDAL();
 
 			// Creamos unos productos de prueba.
 			// dalProductos.altaProducto(new ProductoStockImagen());
@@ -80,7 +82,7 @@ public class ListaProductosServlet extends HttpServlet {
 		if (dalCarrito == null) {
 
 			// Creamos el carrito.
-			dalCarrito = ProductoDALFactory.getProductos();
+			dalCarrito = ProductoDALFactory.getProductosDAL();
 		}
 		// ////////**************///////////////
 
@@ -88,16 +90,21 @@ public class ListaProductosServlet extends HttpServlet {
 
 		ProductoStockImagen producto;
 
+		//inicializamos la base de datos.
+		dalProductos.abrirConexion();
+
+		//Las operaciones con la base de datos.
+		try{
 		// Sin peracion. Mostramos todos los usuarios.
 		if (op == null) {
 
-			ProductoStockImagen[] productos = dalProductos.buscarTodosLosProductos();
+			ProductoStockImagen[] productos = dalProductos.findAll();
 
 			request.setAttribute("productos", productos);
 
 			request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_PRODUCTOS_USUARIO).forward(request, response);
 		} else {
-			String id = request.getParameter("id");
+			int id = Integer.parseInt(request.getParameter("id"));
 
 			Usuario usuario;
 
@@ -106,7 +113,7 @@ public class ListaProductosServlet extends HttpServlet {
 			switch (op) {
 			case "modificar":
 			case "borrar":
-				producto = dalProductos.buscarProductoPorId(id);
+				producto = dalProductos.findById(id);
 				request.setAttribute("producto", producto);
 			case "alta":
 				request.getRequestDispatcher(ConstantesGlobales.RUTA_FORMULARIO_PRODUCTOS_USUARIO).forward(request,
@@ -126,5 +133,17 @@ public class ListaProductosServlet extends HttpServlet {
 			// response);
 
 		}
-	}
+	}catch (Exception e){
+			throw new DAOException("Error en las operaicones con la base de datos.",e);
+
+		}finally {
+
+		    //cerramos la base de datos.
+			try{
+				dalProductos.cerrarConexion();
+			}catch (Exception e){
+				throw new DAOException("Error en la dexconesion con la base de datos.",e);
+			}
+		}
+		}
 }
