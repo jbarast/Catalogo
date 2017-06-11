@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ipartek.jonBarnes.DAO.DAOException;
+import com.ipartek.jonBarnes.DAO.interfaces.ProductoDAO;
 import org.apache.log4j.Logger;
 
 import com.ipartek.jonBarnes.DAL.ProductoDALFactory;
@@ -55,7 +57,7 @@ public class ProductoCRUDServlet extends HttpServlet {
 
 		// Primero recogemos los datos...??
 		ServletContext applicationProductos = getServletContext();
-		ProductoDALInterface dalProductos = (ProductoDALInterface) applicationProductos.getAttribute("dalProductos");
+		ProductoDAO dalProductos = (ProductoDAO) applicationProductos.getAttribute("dalProductos");
 
 		// Las operaciones.
 		// TODO hacerlo:
@@ -64,7 +66,7 @@ public class ProductoCRUDServlet extends HttpServlet {
 		// Miramos que la dalProductos no este vacia.
 		if (dalProductos == null) {
 
-			dalProductos = ProductoDALFactory.getProductos();
+			dalProductos = ProductoDALFactory.getProductosDAL();
 
 			// Creamos unos productos de prueba.
 			// dalProductos.altaProducto(new ProductoStockImagen());
@@ -75,9 +77,13 @@ public class ProductoCRUDServlet extends HttpServlet {
 		// Creamos op.
 		String op = request.getParameter("op");
 
+		//abrimos la conexion con la base de datos.
+		dalProductos.abrirConexion();
+
+		try{
 		if (op == null) {
 
-			ProductoStockImagen[] productos = dalProductos.buscarTodosLosProductos();
+			ProductoStockImagen[] productos = dalProductos.findAll();
 			// Miramos como da el dato.
 			// Por si queremos ver los productos que tenemos en el log.
 			for (int i = 0; i < productos.length; i++) {
@@ -87,14 +93,14 @@ public class ProductoCRUDServlet extends HttpServlet {
 			request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO).forward(request, response);
 		} else {
 
-			String id = request.getParameter("id");
+			int id = Integer.parseInt(request.getParameter("id"));
 
 			ProductoStockImagen producto;
 
 			switch (op) {
 			case "modificar":
 			case "borrar":
-				producto = dalProductos.buscarProductoPorId(id);
+				producto = dalProductos.findById(id);
 				request.setAttribute("producto", producto);
 			case "alta":
 				request.getRequestDispatcher(ConstantesGlobales.RUTA_FORMULARIO).forward(request, response);
@@ -103,5 +109,19 @@ public class ProductoCRUDServlet extends HttpServlet {
 				request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO).forward(request, response);
 			}
 		}
-	}
+	}catch (Exception e){
+			throw new DAOException("Error en las operaciones con la base de datos.",e);
+
+		}finally {
+
+		  //Cerramos la conexion.
+			try{
+				dalProductos.cerrarConexion();
+			}catch (Exception e){
+				throw new DAOException("Error en la dexconesion con la base de datos.",e);
+
+			}
+		}
+		}
+
 }

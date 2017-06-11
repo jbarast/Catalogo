@@ -43,7 +43,7 @@ public class ProbandoElDAO {
 		// Metemos el producto.
 		// daoProductos.insert(productoInsert);
 
-		daoProductos.delete(productoUpdate);
+		//daoProductos.delete(productoUpdate);
 
 		listadoProductos();
 

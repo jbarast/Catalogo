@@ -11,10 +11,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ipartek.jonBarnes.DAO.UsuarioDAOMySQL;
+import com.ipartek.jonBarnes.DAO.interfaces.UsuarioDAO;
 import org.apache.log4j.Logger;
 
-import com.ipartek.jonBarnes.DAL.DALException;
-import com.ipartek.jonBarnes.DAL.UsuariosDAL;
+//import com.ipartek.jonBarnes.DAL.DALException;
+import com.ipartek.jonBarnes.DAO.DAOException;
+
+//import com.ipartek.jonBarnes.DAL.UsuariosDAL;
 import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
 import com.ipartek.jonBarnes.tipos.Usuario;
 
@@ -65,12 +69,19 @@ public class UsuarioFormServlet extends HttpServlet {
 		}
 
 		// Cogemos el objeto de la aplicacion, usuario.
-		Usuario usuario = new Usuario(nombre, pass);
+		Usuario usuario = new Usuario();
+		usuario.setUsername(nombre);
+		usuario.setPassword(pass);
 
 		ServletContext application = getServletContext();
-		UsuariosDAL dal = (UsuariosDAL) application.getAttribute("dal");
+		UsuarioDAOMySQL dal = (UsuarioDAOMySQL) application.getAttribute("dal"); //Mirar esto bien.
 
-		// Operaciones.
+		//Abrimos la conexion con la base de datos.
+		dal.abrirConexion();
+
+		//
+
+		try{
 		switch (op) {
 		case "alta":
 			if (pass.equals(pass2)) {
@@ -79,11 +90,11 @@ public class UsuarioFormServlet extends HttpServlet {
 				log.info(String.format("Registrado el usuario %s.", nombre));
 
 				// Damos de alta al usuario-
-				dal.alta(usuario);
+				dal.insert(usuario);
 				rutaListado.forward(request, response);
 			} else {
-				// Que hacer si las contraseñas no coinciden.
-				usuario.setErrores("Las contraseñas no coinciden");
+				// Que hacer si las contraseï¿½as no coinciden.
+				usuario.setErrores("Las contraseï¿½as no coinciden");
 				request.setAttribute("usuario", usuario);
 				rutaFormulario.forward(request, response);
 			}
@@ -97,8 +108,8 @@ public class UsuarioFormServlet extends HttpServlet {
 					log.info(String.format("Modificado el usuario %s.", nombre));
 
 					// Modificamos el usuario.
-					dal.modificar(usuario);
-				} catch (DALException de) { // Error.
+					dal.update(usuario);
+				} catch (DAOException de) { // Error.
 					usuario.setErrores(de.getMessage());
 					request.setAttribute("usuario", usuario);
 					rutaFormulario.forward(request, response);
@@ -106,8 +117,8 @@ public class UsuarioFormServlet extends HttpServlet {
 				}
 				rutaListado.forward(request, response);
 			} else {
-				// Contraseñas no coinciden.
-				usuario.setErrores("Las contraseñas no coinciden");
+				// Contraseï¿½as no coinciden.
+				usuario.setErrores("Las contraseï¿½as no coinciden");
 				request.setAttribute("usuario", usuario);
 				rutaFormulario.forward(request, response);
 			}
@@ -118,10 +129,25 @@ public class UsuarioFormServlet extends HttpServlet {
 			log.info(String.format("Borrado el usuario %s.", nombre));
 
 			// Borramos el usuario.
-			dal.borrar(usuario);
+			dal.delete(usuario);
 			rutaListado.forward(request, response);
 
 			break;
 		}
-	}
+	}catch (Exception e){
+
+			throw new DAOException("Error en operar con la base de datos.", e);
+
+
+		}finally{
+
+		try{
+		//Cerramos la conexion.
+			dal.cerrarConexion();
+		}catch (Exception e){
+			throw new DAOException("Error en la dexconesion con la base de datos.",e);
+		}
+
+		}
+}
 }
