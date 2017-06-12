@@ -41,11 +41,11 @@
 		<c:forEach items="${requestScope.usuarios}" var="usuario">
 			<tr>
 				<td>
-					<a href="?op=modificar&id=${usuario.nombre}">Modificar</a>
-					<a href="?op=borrar&id=${usuario.nombre}">Borrar</a>
+					<a href="?op=modificar&id=${usuario.id}">Modificar</a>
+					<a href="?op=borrar&id=${usuario.id}">Borrar</a>
 				</td>
-				<td>${usuario.nombre}</td>
-				<td>${usuario.pass}</td>
+				<td>${usuario.username}</td>
+				<td>${usuario.password}</td>
 			</tr>
 		</c:forEach>
 	</tbody>

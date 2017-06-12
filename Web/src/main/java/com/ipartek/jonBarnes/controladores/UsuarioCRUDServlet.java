@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ipartek.jonBarnes.DAL.UsuarioDALFactory;
 import com.ipartek.jonBarnes.DAO.UsuarioDAOMySQL;
 import com.ipartek.jonBarnes.DAO.interfaces.UsuarioDAO;
 import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
@@ -49,16 +50,29 @@ public class UsuarioCRUDServlet extends HttpServlet {
 
 		// Recogemos los datos de la aplicacion.
 		ServletContext application = getServletContext();
-		UsuarioDAOMySQL dal = (UsuarioDAOMySQL) application.getAttribute("dal");
+		UsuarioDAO dal = (UsuarioDAO) application.getAttribute("dalUsuarios"); // Si
+																				// falla
+																				// cambiar
+																				// por
+																				// dal
 
 		// Miramos la operacion a realiczar.
 		String op = request.getParameter("op");
+
+		// Si el dal esta vacio.
+		if (dal == null) {
+
+			// Cargamos los productos de la base de datos.
+			dal = UsuarioDALFactory.getUsuariosDAL();
+
+			application.setAttribute("dalUsuarios", dal);
+		}
 
 		// Sin peracion. Mostramos todos los usuarios.
 		if (op == null) {
 
 			// Abrimos la conexion.
-			daoUsuarios.abrirConexion();
+			dal.abrirConexion();
 
 			// Cogemos todos los usuarios.
 			Usuario[] usuarios = dal.findAll();
@@ -82,6 +96,8 @@ public class UsuarioCRUDServlet extends HttpServlet {
 			case "modificar":
 			case "borrar":
 				usuario = dal.findById(Integer.parseInt(id));
+				// usuario =
+				// dal.findbyUsername(request.getParameter("username"));
 				daoUsuarios.cerrarConexion();
 				request.setAttribute("usuario", usuario);
 			case "alta":

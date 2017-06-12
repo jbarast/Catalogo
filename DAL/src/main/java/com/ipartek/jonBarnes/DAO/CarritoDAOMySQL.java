@@ -4,14 +4,14 @@ package com.ipartek.jonBarnes.DAO;
 
 //import para sql. Mirar que sean las estandar.
 
-import com.ipartek.jonBarnes.DAO.interfaces.ProductoDAO;
-import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import com.ipartek.jonBarnes.DAO.interfaces.ProductoDAO;
+import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
 
 /**
  * 
@@ -30,6 +30,7 @@ public class CarritoDAOMySQL extends IpartekDAOMySQL implements ProductoDAO {
 
 	private final static String FIND_ALL = "SELECT*FROM carritos";
 	private final static String FIND_BY_ID = "SELECT*FROM carritos WHERE id=?";
+	private static final String FIND_BY_NOMBRE = "SELECT*FROM carritos WHERE nombre=?";
 	private final static String INSERT = "INSERT INTO carritos(nombre,descripcion,precio,stock,imagen) VALUES (?,?,?,?,?)";
 	private final static String UPDATE = "UPDATE carritos SET nombre=?,descripcion=?, precio=?, stock=?, imagen=? WHERE id=?";
 	private final static String DELETE = "DELETE FROM carritos WHERE id = ?";
@@ -38,6 +39,7 @@ public class CarritoDAOMySQL extends IpartekDAOMySQL implements ProductoDAO {
 
 	private PreparedStatement psFindAll;
 	private PreparedStatement psFindByID;
+	private PreparedStatement psFindByUsername;
 	private PreparedStatement psInsert;
 	private PreparedStatement psUpdate;
 	private PreparedStatement psDelete;
@@ -146,6 +148,66 @@ public class CarritoDAOMySQL extends IpartekDAOMySQL implements ProductoDAO {
 		}
 
 		return producto;
+	}
+
+	/**
+	 * Buscar producto por nombre de usuario.
+	 */
+	public ProductoStockImagen findbyUsername(String nombre) {
+
+		// Creamos el usuario.
+		ProductoStockImagen productoBD = null;
+
+		ResultSet rs = null;
+
+		try {
+
+			System.out.println(nombre);
+
+			abrirConexion();
+
+			System.out.println(con);
+
+			psFindByUsername = con.prepareStatement(FIND_BY_NOMBRE);
+
+			System.out.println("Hola");
+
+			// Metemos el id en la sentencia-
+			psFindByUsername.setString(1, nombre);
+
+			System.out.println(psFindByUsername);
+
+			rs = psFindByUsername.executeQuery();
+
+			// Cogemos el dato.
+			if (rs.next()) {
+
+				// Creamos el objeto de usuario.
+				productoBD = new ProductoStockImagen();
+
+				// Metemos los datos recogidos.
+				productoBD.setId(rs.getInt("id"));
+				productoBD.setNombre(rs.getString("nombre"));
+				productoBD.setDescripcion(rs.getString("descripcion"));
+				productoBD.setPrecio(rs.getDouble("precio"));
+				productoBD.setStock(rs.getInt("precio"));
+				productoBD.setRutaImagen(rs.getString("Imagen"));
+
+				System.out.println("producto encontrado: " + productoBD); // TODO
+																			// borrarlo
+																			// despues.
+			}
+		} catch (SQLException e) {
+
+			throw new DAOException("Error en FindByUsername", e);
+
+		} finally {
+
+			cerrar(psFindByID, rs);
+		}
+
+		return productoBD;
+
 	}
 
 	/**

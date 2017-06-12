@@ -20,6 +20,9 @@ public interface UsuarioDAO extends IpartekDAO {
 
 	public Usuario findById(int id); // Buscar usuario por id.
 
+	public Usuario findbyUsername(String username); // Buscar usuario por
+													// Username.
+
 	public int insert(Usuario usuario); // Insertar un usuario.
 
 	public void update(Usuario usuario); // Para modificar los datos de un
@@ -29,7 +32,7 @@ public interface UsuarioDAO extends IpartekDAO {
 											// dato un usuario.
 
 	public void delete(int id); // Para borrar un usuario dando como dato un id.
-	
+
 	public boolean validar(Usuario usuario); // Para validar los usuarios.
 
 }

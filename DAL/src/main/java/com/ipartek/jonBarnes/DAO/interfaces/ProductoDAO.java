@@ -19,6 +19,10 @@ public interface ProductoDAO extends IpartekDAO {
 
 	public ProductoStockImagen findById(int id); // Buscar usuario por id.
 
+	public ProductoStockImagen findbyUsername(String nombre); // Buscar producto
+																// por nombre
+																// producto.
+
 	public int insert(ProductoStockImagen producto); // Insertar un usuario.
 
 	public void update(ProductoStockImagen producto); // Para modificar los

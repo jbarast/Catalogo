@@ -147,20 +147,18 @@ public class UsuarioDAOMySQL extends IpartekDAOMySQL implements UsuarioDAO {
 		return usuario;
 	}
 
-
 	/**
 	 * Para buscar un usuario apartir del username.
+	 * 
 	 * @param username
 	 * @return El usuario.
 	 */
-	public Usuario findbyUsername(String username){
+	public Usuario findbyUsername(String username) {
 
 		// Creamos el usuario.
 		Usuario usuarioBD = null;
 
 		ResultSet rs = null;
-
-
 
 		try {
 
@@ -173,9 +171,6 @@ public class UsuarioDAOMySQL extends IpartekDAOMySQL implements UsuarioDAO {
 			abrirConexion();
 
 			System.out.println(con);
-
-
-
 
 			psFindByUsername = con.prepareStatement(FIND_BY_USERNAME);
 
@@ -230,6 +225,7 @@ public class UsuarioDAOMySQL extends IpartekDAOMySQL implements UsuarioDAO {
 			psInsert.setString(3, usuario.getNombre_completo());
 			psInsert.setInt(4, usuario.getId_roles());
 
+			System.out.println("Comando SQL en Insert: " + psInsert);
 			int res = psInsert.executeUpdate();
 
 			if (res != 1)
@@ -268,6 +264,8 @@ public class UsuarioDAOMySQL extends IpartekDAOMySQL implements UsuarioDAO {
 
 			// Id del que quiero cambiar.
 			psUpdate.setInt(5, usuario.getId());
+
+			System.out.println(psUpdate);
 
 			// Hacemos el comando.
 			int res = psUpdate.executeUpdate();
@@ -385,28 +383,25 @@ public class UsuarioDAOMySQL extends IpartekDAOMySQL implements UsuarioDAO {
 
 		// Sacamos el usuario de la base de datos si lo saca.
 
-     if(usuario.getUsername() != null) {
+		if (usuario.getUsername() != null) {
 
+			if (this.findbyUsername((usuario.getUsername())) != null) {
 
+				usuarioBD = this.findbyUsername(usuario.getUsername());
 
-		 if(this.findbyUsername((usuario.getUsername()))!=null){
+				if (usuarioBD.getUsername() != null) {
 
-			 usuarioBD = this.findbyUsername(usuario.getUsername());
+					// Sacamos el username y la contraseña.
+					String contraseñaBD = usuarioBD.getPassword();
+					String usernameBD = usuarioBD.getUsername();
 
-		 if (usuarioBD.getUsername() != null) {
-
-			 //Sacamos el username y la contraseña.
-			 String contraseñaBD = usuarioBD.getPassword();
-			 String usernameBD = usuarioBD.getUsername();
-
-
-
-			 // Miramos si son iguales.
-			 if (contraseñaBD.equals(usuario.getPassword()) && usernameBD.equals(usuario.getUsername())) {
-				 usuarioValido = true;
-			 }
-		 }
-	 }}
+					// Miramos si son iguales.
+					if (contraseñaBD.equals(usuario.getPassword()) && usernameBD.equals(usuario.getUsername())) {
+						usuarioValido = true;
+					}
+				}
+			}
+		}
 		// True si existe false si no.
 
 		return usuarioValido;

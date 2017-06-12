@@ -30,12 +30,16 @@
 			<label for="nombre">Nombre</label> 
 			
 			<input id="nombre" name="nombre"
-			  required="required" minlength="4" value="${usuario.nombre}" 
+			  required="required" minlength="4" value="${usuario.username}" 
 			  
 			  <c:if test="${param.op == 'modificar' or param.op == 'borrar'}">
 			  	readonly="readonly"
 			  </c:if>   
 		  	/>
+		</fieldset>
+		<fieldset>
+			<label for="nombre_completo">Contraseña</label> <input id="nombre_completo"
+				name="nombre_completo" />
 		</fieldset>
 		<fieldset>
 			<label for="pass">Contraseña</label> <input type="password" id="pass"
