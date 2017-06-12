@@ -131,6 +131,15 @@ public class ProductoFormServlet extends HttpServlet {
 			switch (op) {
 			case "alta":
 				try {
+
+					producto.setNombre(nombre);
+					producto.setDescripcion(descripcion);
+					producto.setPrecio(Double.parseDouble(precio));
+					producto.setStock(stock);
+					producto.setRutaImagen(rutaImagen);
+
+					// Miramos que producto mete.
+					System.out.println("Producto para alta: " + producto);
 					// Indicamos que producto se a dado de alta.
 					log.info(String.format("Objeto %s a�adido a la tienda.", producto.getNombre()));
 

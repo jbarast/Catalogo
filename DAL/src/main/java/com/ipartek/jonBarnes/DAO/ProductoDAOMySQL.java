@@ -226,6 +226,7 @@ public class ProductoDAOMySQL extends IpartekDAOMySQL implements ProductoDAO {
 			psInsert.setInt(4, producto.getStock());
 			psInsert.setString(5, producto.getRutaImagen());
 
+			System.out.println("Insert producto comando SQL: " + psInsert);
 			int res = psInsert.executeUpdate();
 
 			if (res != 1)
