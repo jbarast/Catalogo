@@ -88,21 +88,25 @@ public class ProductoFormServlet extends HttpServlet {
 		// String id = request.getParameter("id");
 		// int id = String.valueOf(productos.length + 1); Mirarlo bien.
 		String descripcion = request.getParameter("descripcion");
+
+		// Para precio y stock hay que tener cuidado con que metan letras.
+		// TODO modificar para que no puedan meter letras.
 		String precio = request.getParameter("precio");
-		if (precio == null) {
+
+		if (precio == null || precio.equals("")) {
 			precio = "0";
 		}
 
 		// Cogemos el stock
 		String stringStock = request.getParameter("stock");
 
-		if (stringStock == null) {
-			precio = "0";
+		if (stringStock == null || stringStock.equals("")) {
+			stringStock = "0";
 		}
 
-		System.out.println(stringStock);
+		System.out.println("El stock es : " + stringStock);
 		// int stock = Integer.parseInt(stringStock);
-		int stock = 1; // TODO quitar esto, solo es para seguir adelante.
+		int stock = Integer.parseInt(stringStock);
 
 		String rutaImagen = request.getParameter("rutaImagen");
 
@@ -161,6 +165,10 @@ public class ProductoFormServlet extends HttpServlet {
 					// Cogemos la id.
 					producto = dalProductos.findbyUsername(producto.getNombre());
 					producto.setDescripcion(descripcion);
+					producto.setPrecio(Double.parseDouble(precio));
+					producto.setStock(stock);
+					producto.setRutaImagen(rutaImagen);
+
 					// Indicamos que producto se a modificado..
 					log.info(String.format("Objeto %s modificado de la  tienda.", producto.getNombre()));
 

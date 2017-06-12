@@ -89,7 +89,7 @@ public class ProductoDAOMySQL extends IpartekDAOMySQL implements ProductoDAO {
 				producto.setDescripcion(rs.getString("descripcion"));
 				producto.setPrecio(rs.getDouble("precio"));
 				producto.setStock(rs.getInt("stock"));
-				producto.setRutaImagen("Imagen");
+				producto.setRutaImagen(rs.getString("Imagen"));
 
 				// Añadimos al array el usuario creado.
 				productos.add(producto);
@@ -135,7 +135,7 @@ public class ProductoDAOMySQL extends IpartekDAOMySQL implements ProductoDAO {
 				producto.setDescripcion(rs.getString("descripcion"));
 				producto.setPrecio(rs.getDouble("precio"));
 				producto.setStock(rs.getInt("stock"));
-				producto.setRutaImagen("Imagen");
+				producto.setRutaImagen(rs.getString("Imagen"));
 			}
 		} catch (SQLException e) {
 
