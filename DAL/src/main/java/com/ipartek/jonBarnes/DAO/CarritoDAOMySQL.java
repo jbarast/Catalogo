@@ -1,55 +1,49 @@
-//ProductoDAOMySQL.java
+//CarritoDAOMySQL.java
 
 package com.ipartek.jonBarnes.DAO;
-
-//import para sql. Mirar que sean las estandar.
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
-import com.ipartek.jonBarnes.DAO.interfaces.ProductoDAO;
+import com.ipartek.jonBarnes.DAO.interfaces.CarritoDAO;
 import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
 
 /**
  * 
- * DAO para la tabla de usuarios.
+ * DAO para el carrito.
  * 
- * 
- * @author jonBarnes
- * @version 09/06/2017
+ * @author JAVA
+ * @version 13/06/2017
  *
  */
-public class CarritoDAOMySQL extends IpartekDAOMySQL implements ProductoDAO {
+public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 
 	// atributos.
 
-	// Sentencias sql constanetes.
-
-	private final static String FIND_ALL = "SELECT*FROM carritos";
-	private final static String FIND_BY_ID = "SELECT*FROM carritos WHERE id=?";
-	private static final String FIND_BY_NOMBRE = "SELECT*FROM carritos WHERE nombre=?";
-	private final static String INSERT = "INSERT INTO carritos(nombre,descripcion,precio,stock,imagen) VALUES (?,?,?,?,?)";
-	private final static String UPDATE = "UPDATE carritos SET nombre=?,descripcion=?, precio=?, stock=?, imagen=? WHERE id=?";
-	private final static String DELETE = "DELETE FROM carritos WHERE id = ?";
+	// Sentencias SQL.
+	private final static String MOSTRAR_CARRITO = "SELECT productos.id,productos.nombre,productos.descripcion,productos.nombre,carrito_productos.cantidad,productos.Imagen FROM productos,carrito,carrito_productos WHERE carrito_productos.id_productos = productos.id AND carrito.id_usuario = '?'";
+	private final static String NUEVO_CARRITO = "INSERT INTO carrito(numero_carrito,id_usuario,fecha) VALUES(?,?,?)";
+	private final static String METER_PRODUCTO = "INSERT INTO carrito_productos(id_carrito,id_producto,cantidad) VALUES(?,?,?)";
+	private final static String DESCONTAR_PRODUCTO = "UPDATE carrito_productos SET cantidad=? WHERE id_carrito=? AND id_productos=?";
+	private final static String ELIMINAR_PRODUCTO = "DELETE FROM carrito_productos WHERRE id_carrito=? AND id_productos=?";
+	private final static String BORRAR_CARRITO = "SELECT*FROM usuarios";
+	private final static String MANDAR_A_FACTURA = "NO SE COMO HACERLO"; // TODO
+																			// Terminar
 
 	// Preparamos los atributos de sentencias.
-
-	private PreparedStatement psFindAll;
-	private PreparedStatement psFindByID;
-	private PreparedStatement psFindByUsername;
-	private PreparedStatement psInsert;
-	private PreparedStatement psUpdate;
-	private PreparedStatement psDelete;
+	private PreparedStatement psMostrarCarrito;
+	private PreparedStatement psNuevoCarrito;
+	private PreparedStatement psMeterProducto;
+	private PreparedStatement psDesconectarProducto;
+	private PreparedStatement psBorrarCarrito;
+	private PreparedStatement psMandarAFactura;
 
 	// Constructor.
-
 	public CarritoDAOMySQL() {
 
 		super();
-
 	}
 
 	public CarritoDAOMySQL(String url, String mysqlUser, String mysqlPass) {
@@ -58,289 +52,111 @@ public class CarritoDAOMySQL extends IpartekDAOMySQL implements ProductoDAO {
 
 	}
 
-	// Metodos de la Interfaz.
+	// Otros metodos.
 
-	/**
-	 * Buscar todos los usuarios de una tabla.
-	 */
-	public ProductoStockImagen[] findAll() {
+	@Override
+	public ProductoStockImagen[] mostrarCarrito(int id_usuario) {
 
 		// Creamos la ArrayList.
-		ArrayList<ProductoStockImagen> productos = new ArrayList<ProductoStockImagen>();
+		ArrayList<ProductoStockImagen> productosCarrito = new ArrayList<ProductoStockImagen>();
 		ResultSet rs = null;
 
+		System.out.println("estoy aqui");
+		System.out.println(id_usuario);
+		// La operacion que hacemos.
 		try {
 
-			psFindAll = con.prepareStatement(FIND_ALL);
-			// Lee la tabla.
-			// ""rs es el valor de la tabla??""
-			rs = psFindAll.executeQuery();
+			// Preparamos la sentencia SQL.
+			psMostrarCarrito = con.prepareStatement(MOSTRAR_CARRITO);
+			System.out.println(psMostrarCarrito);
 
-			// Creamos la clase de usuario.
+			psMostrarCarrito.setInt(1, id_usuario);
+
+			System.out.println(psMostrarCarrito);
+			// Ejecutamos la sentencia SQL.
+			rs = psMostrarCarrito.executeQuery();
+
+			// Creamos la clase producto.
 			ProductoStockImagen producto;
 
-			// Con el resultado, pasamos a recorrer la tabla.
 			while (rs.next()) {
 
-				// System.out.println(rs.getString("username"));
-				// Creamos el objeto de usuario.
 				producto = new ProductoStockImagen();
+
 				producto.setId(rs.getInt("id"));
 				producto.setNombre(rs.getString("nombre"));
 				producto.setDescripcion(rs.getString("descripcion"));
 				producto.setPrecio(rs.getDouble("precio"));
-				producto.setStock(rs.getInt("stock"));
-				producto.setRutaImagen("Imagen");
+				producto.setStock(rs.getInt("cantidad"));
+				producto.setRutaImagen(rs.getString("Imagen"));
 
-				// Añadimos al array el usuario creado.
-				productos.add(producto);
+				// Añadimos el producto al array.
+				productosCarrito.add(producto);
 
 			}
 		} catch (SQLException e) {
-
-			throw new DAOException("Error en findAll", e);
+			throw new DAOException("Error en mostrar productos del carrito", e);
 		} finally {
-
-			cerrar(psFindAll, rs);
+			// Cerramos.
+			cerrar(psMostrarCarrito, rs);
 		}
 
-		return productos.toArray(new ProductoStockImagen[productos.size()]);
-	}
-
-	/**
-	 * Buscar un usuario por id en una tabla.
-	 */
-	public ProductoStockImagen findById(int id) {
-
-		// Creamos el usuario.
-		ProductoStockImagen producto = null;
-
-		ResultSet rs = null;
-
-		try {
-
-			psFindByID = con.prepareStatement(FIND_BY_ID);
-
-			// Metemos el id en la sentencia-
-			psFindByID.setInt(1, id);
-
-			rs = psFindByID.executeQuery();
-
-			// Cogemos el dato.
-			if (rs.next()) {
-
-				// Metemos los datos recogidos.
-				producto = new ProductoStockImagen();
-				producto.setId(rs.getInt("id"));
-				producto.setNombre(rs.getString("nombre"));
-				producto.setDescripcion(rs.getString("descripcion"));
-				producto.setPrecio(rs.getDouble("precio"));
-				producto.setStock(rs.getInt("stock"));
-				producto.setRutaImagen("Imagen");
-			}
-		} catch (SQLException e) {
-
-			throw new DAOException("Error en FindByID", e);
-
-		} finally {
-
-			cerrar(psFindByID, rs);
-		}
-
-		return producto;
-	}
-
-	/**
-	 * Buscar producto por nombre de usuario.
-	 */
-	public ProductoStockImagen findbyUsername(String nombre) {
-
-		// Creamos el usuario.
-		ProductoStockImagen productoBD = null;
-
-		ResultSet rs = null;
-
-		try {
-
-			System.out.println(nombre);
-
-			abrirConexion();
-
-			System.out.println(con);
-
-			psFindByUsername = con.prepareStatement(FIND_BY_NOMBRE);
-
-			System.out.println("Hola");
-
-			// Metemos el id en la sentencia-
-			psFindByUsername.setString(1, nombre);
-
-			System.out.println(psFindByUsername);
-
-			rs = psFindByUsername.executeQuery();
-
-			// Cogemos el dato.
-			if (rs.next()) {
-
-				// Creamos el objeto de usuario.
-				productoBD = new ProductoStockImagen();
-
-				// Metemos los datos recogidos.
-				productoBD.setId(rs.getInt("id"));
-				productoBD.setNombre(rs.getString("nombre"));
-				productoBD.setDescripcion(rs.getString("descripcion"));
-				productoBD.setPrecio(rs.getDouble("precio"));
-				productoBD.setStock(rs.getInt("precio"));
-				productoBD.setRutaImagen(rs.getString("Imagen"));
-
-				System.out.println("producto encontrado: " + productoBD); // TODO
-																			// borrarlo
-																			// despues.
-			}
-		} catch (SQLException e) {
-
-			throw new DAOException("Error en FindByUsername", e);
-
-		} finally {
-
-			cerrar(psFindByID, rs);
-		}
-
-		return productoBD;
+		// Lo que devolvemos.
+		return productosCarrito.toArray(new ProductoStockImagen[productosCarrito.size()]);
 
 	}
 
 	/**
-	 * Metodo para insertar un usuario.
+	 * Para crear el carrito del usuario.
 	 */
-	public int insert(ProductoStockImagen producto) {
-
-		ResultSet generatedKeys = null;
-
-		try {
-
-			psInsert = con.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-
-			psInsert.setString(1, producto.getNombre());
-			psInsert.setString(2, producto.getDescripcion());
-			psInsert.setDouble(3, producto.getPrecio());
-			psInsert.setInt(4, producto.getStock());
-			psInsert.setString(5, producto.getRutaImagen());
-
-			int res = psInsert.executeUpdate();
-
-			if (res != 1)
-				throw new DAOException("La inserción ha devuelto un valor " + res);
-
-			generatedKeys = psInsert.getGeneratedKeys();
-
-			if (generatedKeys.next())
-				return generatedKeys.getInt(1);
-			else
-				throw new DAOException("No se ha recibido la clave generada");
-
-		} catch (SQLException e) {
-			throw new DAOException("Error en insert", e);
-		} finally {
-			cerrar(psInsert, generatedKeys);
-		}
-	}
-
-	/**
-	 * Cambiamos las parametros de una fila de base.
-	 */
-	public void update(ProductoStockImagen producto) {
-
-		// Son 4 parametros
-
-		try {
-			// Primero metemos los datos en el commando.
-			psUpdate = con.prepareStatement(UPDATE);
-
-			// Datos que queremos cambiar.
-			psUpdate.setString(1, producto.getNombre());
-			psUpdate.setString(2, producto.getDescripcion());
-			psUpdate.setDouble(3, producto.getPrecio());
-			psUpdate.setInt(4, producto.getStock());
-			psUpdate.setString(5, producto.getRutaImagen());
-
-			// Id del que quiero cambiar.
-			psUpdate.setInt(6, producto.getId());
-
-			// Hacemos el comando.
-			int res = psUpdate.executeUpdate();
-
-			if (res != 1) {
-				throw new DAOException(String.format(
-						"Cuando solo deberia haber cambiado un Registro se han cambiado %d, con id: %d", res,
-						producto.getId()));
-
-			}
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		} finally {
-			cerrar(psUpdate);
-		}
+	@Override
+	public void crearCarritoUsuario(int id_usuario) {
+		// TODO Auto-generated method stub
 
 	}
 
 	/**
-	 * Para borrar usuarios a partir de usuario.
+	 * Para meter un producto al carrito.
 	 */
-	public void delete(ProductoStockImagen producto) {
-
-		try {
-
-			psDelete = con.prepareStatement(DELETE);
-
-			// Metemos los datos del usuario en la sentencia.
-			psDelete.setInt(1, producto.getId());
-
-			// Hacemos el comando SQL.
-			int res = psDelete.executeUpdate();
-
-			// Si el resultado es diferente a uno. Hay un problema.
-			if (res != 1) {
-				throw new DAOException(String.format(
-						"Cuando solo deberia haber cambiado un Registro se han cambiado %d", res));
-			}
-
-		} catch (SQLException e) {
-
-			throw new DAOException("Error en DELETE.", e);
-		} finally {
-			cerrar(psDelete);
-		}
+	@Override
+	public void meterProducto(int id_producto) {
+		// TODO Auto-generated method stub
 
 	}
 
 	/**
-	 * Para borrar usuarios a partid de id.
+	 * Para decrementar en uno la cantidad de un producto del carrito.
 	 */
-	public void delete(int id) {
-		try {
+	@Override
+	public void descontarProducto(int id_producto) {
+		// TODO Auto-generated method stub
 
-			psDelete = con.prepareStatement(DELETE);
+	}
 
-			// Metemos los datos del usuario en la sentencia.
-			psDelete.setInt(1, id);
+	/**
+	 * Elimina un producto del carrito
+	 */
+	@Override
+	public void eliminarProducto(int id_producto) {
+		// TODO Auto-generated method stub
 
-			// Hacemos el comando SQL.
-			int res = psDelete.executeUpdate();
+	}
 
-			// Si el resultado es diferente a uno. Hay un problema.
-			if (res != 1) {
-				throw new DAOException(String.format(
-						"Cuando solo deberia haber cambiado un Registro se han cambiado %d", res));
-			}
+	/**
+	 * Borra el carrito del usuario.
+	 */
+	@Override
+	public void borrarCarritoUsuario(int id_usuario) {
+		// TODO Auto-generated method stub
 
-		} catch (SQLException e) {
+	}
 
-			throw new DAOException("Error en DELETE.", e);
-		} finally {
-			cerrar(psDelete);
-		}
+	/**
+	 * Manda la informacion del carrito al navagedor.
+	 */
+	@Override
+	public void mandarAFactura(int id_usuario) {
+		// TODO Auto-generated method stub
 
 	}
 
