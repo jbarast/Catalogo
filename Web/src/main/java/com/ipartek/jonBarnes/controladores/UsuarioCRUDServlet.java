@@ -56,9 +56,6 @@ public class UsuarioCRUDServlet extends HttpServlet {
 																				// por
 																				// dal
 
-		// Miramos la operacion a realiczar.
-		String op = request.getParameter("op");
-
 		// Si el dal esta vacio.
 		if (dal == null) {
 
@@ -68,11 +65,14 @@ public class UsuarioCRUDServlet extends HttpServlet {
 			application.setAttribute("dalUsuarios", dal);
 		}
 
+		// Abrimos la conexion.
+		dal.abrirConexion();
+
+		// Miramos la operacion a realiczar.
+		String op = request.getParameter("op");
+
 		// Sin peracion. Mostramos todos los usuarios.
 		if (op == null) {
-
-			// Abrimos la conexion.
-			dal.abrirConexion();
 
 			// Cogemos todos los usuarios.
 			Usuario[] usuarios = dal.findAll();
@@ -84,17 +84,20 @@ public class UsuarioCRUDServlet extends HttpServlet {
 
 			request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_USUARIO).forward(request, response);
 		} else {
+
+			// ABro la conexion.
+			// daoUsuarios.abrirConexion();
 			String id = request.getParameter("id");
 
 			Usuario usuario;
 
 			// Operacion a realizar, modificar, borrar o dar de alta a un
-			// ABro la conexion.
-			daoUsuarios.abrirConexion();
+
 			// usuario.
 			switch (op) {
 			case "modificar":
 			case "borrar":
+
 				usuario = dal.findById(Integer.parseInt(id));
 				// usuario =
 				// dal.findbyUsername(request.getParameter("username"));

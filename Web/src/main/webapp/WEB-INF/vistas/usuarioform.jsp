@@ -38,7 +38,7 @@
 		  	/>
 		</fieldset>
 		<fieldset>
-			<label for="nombre_completo">Contraseña</label> <input id="nombre_completo"
+			<label for="nombre_completo">Nombre Completo</label> <input id="nombre_completo"
 				name="nombre_completo" />
 		</fieldset>
 		<fieldset>
