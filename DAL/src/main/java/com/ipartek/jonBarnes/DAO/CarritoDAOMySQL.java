@@ -23,20 +23,22 @@ public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 	// atributos.
 
 	// Sentencias SQL.
-	private final static String MOSTRAR_CARRITO = "SELECT productos.id,productos.nombre,productos.descripcion,productos.nombre,carrito_productos.cantidad,productos.Imagen FROM productos,carrito,carrito_productos WHERE carrito_productos.id_productos = productos.id AND carrito.id_usuario = '?'";
-	private final static String NUEVO_CARRITO = "INSERT INTO carrito(numero_carrito,id_usuario,fecha) VALUES(?,?,?)";
-	private final static String METER_PRODUCTO = "INSERT INTO carrito_productos(id_carrito,id_producto,cantidad) VALUES(?,?,?)";
-	private final static String DESCONTAR_PRODUCTO = "UPDATE carrito_productos SET cantidad=? WHERE id_carrito=? AND id_productos=?";
+	private final static String MOSTRAR_CARRITO = "SELECT productos.id,productos.nombre,productos.descripcion,productos.precio,carrito_productos.cantidad,productos.Imagen FROM productos,carrito,carrito_productos WHERE carrito_productos.id_productos = productos.id AND carrito.id_usuario = carrito_productos.id_carrito AND carrito.id_usuario=?";
+	private final static String NUEVO_CARRITO = "INSERT IGNORE INTO carrito set id_usuario = ?,numero_carrito=?, fecha=?";
+	private final static String AUMENTAR_UN_PRODUCTO = "UPDATE IGNORE carrito_productos SET cantidad=cantidad+1 WHERE id_productos=? AND id_carrito=(SELECT numero_carrito FROM carrito WHERE id_usuario=?)";
+	private final static String DESCONTAR_PRODUCTO = "UPDATE IGNORE carrito_productos SET cantidad=cantidad+1 WHERE id_productos=? AND id_carrito=(SELECT numero_carrito FROM carrito WHERE id_usuario=?)";
+	private final static String INSERTAR_PRODUCTO = "INSERT IGNORE INTO carrito_productos SET cantidad='1', id_productos=?, id_carrito=(SELECT numero_carrito FROM carrito WHERE id_usuario=?);";
 	private final static String ELIMINAR_PRODUCTO = "DELETE FROM carrito_productos WHERRE id_carrito=? AND id_productos=?";
-	private final static String BORRAR_CARRITO = "SELECT*FROM usuarios";
+	private final static String BORRAR_CARRITO = "DELETE FROM carrito WHERE id_usuario=?";
 	private final static String MANDAR_A_FACTURA = "NO SE COMO HACERLO"; // TODO
 																			// Terminar
 
 	// Preparamos los atributos de sentencias.
 	private PreparedStatement psMostrarCarrito;
 	private PreparedStatement psNuevoCarrito;
-	private PreparedStatement psMeterProducto;
+	private PreparedStatement psAumentarUnProducto;
 	private PreparedStatement psDesconectarProducto;
+	private PreparedStatement psMeterProducto;
 	private PreparedStatement psBorrarCarrito;
 	private PreparedStatement psMandarAFactura;
 
@@ -68,11 +70,9 @@ public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 
 			// Preparamos la sentencia SQL.
 			psMostrarCarrito = con.prepareStatement(MOSTRAR_CARRITO);
-			System.out.println(psMostrarCarrito);
 
 			psMostrarCarrito.setInt(1, id_usuario);
 
-			System.out.println(psMostrarCarrito);
 			// Ejecutamos la sentencia SQL.
 			rs = psMostrarCarrito.executeQuery();
 
@@ -111,7 +111,33 @@ public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 	 */
 	@Override
 	public void crearCarritoUsuario(int id_usuario) {
-		// TODO Auto-generated method stub
+
+		// atributos necesarios.
+		// La fecha.
+		java.util.Date utilDate = new java.util.Date();
+		java.sql.Date fecha = new java.sql.Date(utilDate.getTime());
+
+		// Creamos el carrito de usuario.
+
+		try {
+			psNuevoCarrito = con.prepareStatement(NUEVO_CARRITO);
+
+			// Metemos los datos al comando SQL.
+			psNuevoCarrito.setInt(1, id_usuario);
+			System.out.println(psNuevoCarrito);
+			psNuevoCarrito.setInt(2, id_usuario);
+			System.out.println(psNuevoCarrito);
+
+			psNuevoCarrito.setDate(3, fecha);
+			System.out.println(psNuevoCarrito);
+
+			// Ejecutamos la sentencia SQL.
+			psNuevoCarrito.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -119,8 +145,27 @@ public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 	 * Para meter un producto al carrito.
 	 */
 	@Override
-	public void meterProducto(int id_producto) {
-		// TODO Auto-generated method stub
+	public void meterProducto(int id_producto, int id_usuario) {
+
+		try {
+			psMeterProducto = con.prepareStatement(INSERTAR_PRODUCTO);
+
+			// Metemos los parametros.
+			psMeterProducto.setInt(1, id_producto);
+			psMeterProducto.setInt(2, id_usuario);
+
+			// Miramos lo de escribir.
+			System.out.println(psMeterProducto);
+
+			// Primero miramos/creamos el carrito.
+			crearCarritoUsuario(id_usuario);
+
+			// Hacemos la sentencia SQL.
+			psMeterProducto.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

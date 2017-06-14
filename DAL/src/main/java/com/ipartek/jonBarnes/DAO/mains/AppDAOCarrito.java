@@ -31,7 +31,10 @@ public class AppDAOCarrito {
 		daoCarrito = new CarritoDAOMySQL("jdbc:mysql://localhost/ipartek", "root", "");
 
 		daoCarrito.abrirConexion();
-		listadoCarrito(daoCarrito, 4);
+
+		daoCarrito.meterProducto(8, 5);
+
+		listadoCarrito(daoCarrito, 5);
 		daoCarrito.cerrarConexion();
 
 	}
