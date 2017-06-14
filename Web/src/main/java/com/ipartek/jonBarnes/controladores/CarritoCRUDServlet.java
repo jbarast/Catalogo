@@ -10,17 +10,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.ipartek.jonBarnes.DAL.CarritoDALFactory;
-import com.ipartek.jonBarnes.DAO.DAOException;
-import com.ipartek.jonBarnes.DAO.interfaces.ProductoDAO;
 import org.apache.log4j.Logger;
 
+import com.ipartek.jonBarnes.DAL.CarritoDALFactory;
+import com.ipartek.jonBarnes.DAO.DAOException;
+import com.ipartek.jonBarnes.DAO.interfaces.CarritoDAO;
 //import com.ipartek.jonBarnes.DAL.ProductoDALFactory;
 //import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
 import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
 import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
 //Las rutas.
 //Mis imports.
+import com.ipartek.jonBarnes.tipos.Usuario;
 
 /**
  * Servlet para carricrud.jsp
@@ -62,7 +63,7 @@ public class CarritoCRUDServlet extends HttpServlet {
 		HttpServletResponse res = (HttpServletResponse) response;
 
 		HttpSession session = ((HttpServletRequest) request).getSession();
-		ProductoDAO dalCarrito = (ProductoDAO) session.getAttribute("dalCarrito");
+		CarritoDAO dalCarrito = (CarritoDAO) session.getAttribute("dalCarrito");
 
 		// Miramos si cogemos daltos del dalCarrito.
 		log.info(String.format("dalCarrito: %s", dalCarrito));
@@ -81,6 +82,11 @@ public class CarritoCRUDServlet extends HttpServlet {
 
 		}
 
+		// abrimos la conexion.
+		dalCarrito.abrirConexion();
+
+		// TODO como meter el usuario.
+
 		// Creamos op.
 		String op = request.getParameter("op");
 
@@ -88,60 +94,60 @@ public class CarritoCRUDServlet extends HttpServlet {
 		log.info(String.format("Operacion a realizar: %s", op));
 		log.info(String.format("dalCarrito %s", dalCarrito));
 
-		//abrimos la conexion.
-		dalCarrito.abrirConexion();
+		// El usuario que esta registrado.
+		Usuario usuario = new Usuario();
+		usuario = (Usuario) session.getAttribute("usuario");
 
-		//Las operaciones.
-		try{
+		// Las operaciones.
+		try {
 
-		if (op == null) {
+			if (op == null) {
 
-			ProductoStockImagen[] carrito = dalCarrito.findAll();
+				ProductoStockImagen[] carrito = dalCarrito.mostrarCarrito(usuario.getId());
 
-			// log.info(String.format("Carrito: %s", carrito.toString()));
-			// request.setAttribute("carrito", carrito);
-			// Por si acaso.
-			session.setAttribute("carrito", carrito);
+				// log.info(String.format("Carrito: %s", carrito.toString()));
+				// request.setAttribute("carrito", carrito);
+				// Por si acaso.
+				session.setAttribute("carrito", carrito);
 
-			// Imprimimos la session.
-			log.info(String.format("Session %s", session.getAttribute("carrito")));
-			// Imprimimos el carrito.
-			for (int i = 0; i < carrito.length; i++) {
-				log.info(String.format("Que tiene el carrito?? %s", carrito[i]));
-			}
+				// Imprimimos la session.
+				log.info(String.format("Session %s", session.getAttribute("carrito")));
+				// Imprimimos el carrito.
+				for (int i = 0; i < carrito.length; i++) {
+					log.info(String.format("Que tiene el carrito?? %s", carrito[i]));
+				}
 
-			request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_CARRITO).forward(request, response);
-		} else {
-
-			String id = request.getParameter("id");
-
-			ProductoStockImagen producto;
-
-			switch (op) {
-			case "modificar":
-			case "borrar":
-				producto = dalCarrito.findById(Integer.parseInt(id));
-				request.setAttribute("dalCarrito", producto);
-			case "alta":
-				request.getRequestDispatcher(ConstantesGlobales.RUTA_FORMULARIO_CARRITO).forward(request, response);
-				break;
-			default:
 				request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_CARRITO).forward(request, response);
+			} else {
+
+				String id = request.getParameter("id");
+
+				ProductoStockImagen producto;
+
+				switch (op) {
+				case "modificar":
+				case "borrar":
+					// producto = dalCarrito.findById(Integer.parseInt(id));
+					// request.setAttribute("dalCarrito", producto);
+				case "alta":
+					request.getRequestDispatcher(ConstantesGlobales.RUTA_FORMULARIO_CARRITO).forward(request, response);
+					break;
+				default:
+					request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_CARRITO).forward(request, response);
+				}
 			}
-		}
-	}catch (Exception e){
-			throw new DAOException("Error en las operaciones con la base de datos.",e);
+		} catch (Exception e) {
+			throw new DAOException("Error en las operaciones con la base de datos.", e);
 
-
-		}finally {
-		//cerramos la conexion.
-			try{
+		} finally {
+			// cerramos la conexion.
+			try {
 				dalCarrito.cerrarConexion();
 
-			}catch (Exception e){
-				throw new DAOException("Error en la dexconesion con la base de datos.",e);
+			} catch (Exception e) {
+				throw new DAOException("Error en la dexconesion con la base de datos.", e);
 
 			}
 		}
-		}
+	}
 }
