@@ -25,10 +25,10 @@ public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 	// Sentencias SQL.
 	private final static String MOSTRAR_CARRITO = "SELECT 	productos.id,	productos.nombre, productos.descripcion, productos.precio, carrito_productos.cantidad, productos.Imagen  FROM  	productos,carrito,carrito_productos WHERE carrito.id= (SELECT id FROM carrito WHERE id_usuario=?) AND carrito_productos.id_carrito=(SELECT id FROM carrito WHERE id_usuario=?) AND productos.id = carrito_productos.id_productos";
 	private final static String NUEVO_CARRITO = "INSERT IGNORE INTO carrito set id_usuario = ?,numero_carrito=?, fecha=?";
-	private final static String AUMENTAR_UN_PRODUCTO = "UPDATE IGNORE carrito_productos SET cantidad=cantidad+1 WHERE id_productos=? AND id_carrito=(SELECT numero_carrito FROM carrito WHERE id_usuario=?)";
-	private final static String DESCONTAR_PRODUCTO = "UPDATE IGNORE carrito_productos SET cantidad=cantidad+1 WHERE id_productos=? AND id_carrito=(SELECT numero_carrito FROM carrito WHERE id_usuario=?)";
+	private final static String AUMENTAR_UN_PRODUCTO = "UPDATE IGNORE carrito_productos SET cantidad=cantidad+1 WHERE id_productos=? AND id_carrito=(SELECT id FROM carrito WHERE id_usuario=?)";
+	private final static String DESCONTAR_PRODUCTO = "UPDATE IGNORE carrito_productos SET cantidad=cantidad+1 WHERE id_productos=? AND id_carrito=(SELECT id FROM carrito WHERE id_usuario=?)";
 	private final static String INSERTAR_PRODUCTO = "INSERT IGNORE INTO carrito_productos SET cantidad='1', id_productos=?, id_carrito=(SELECT id FROM carrito WHERE id_usuario=?);";
-	private final static String ELIMINAR_PRODUCTO = "DELETE FROM carrito_productos WHERRE id_carrito=? AND id_productos=?";
+	private final static String ELIMINAR_PRODUCTO = "DELETE FROM carrito_productos WHERRE id_carrito=(SELECT id FROM carrito WHERE id_usuario=?) AND id_productos=?";
 	private final static String BORRAR_CARRITO = "DELETE FROM carrito WHERE id_usuario=?";
 	private final static String MANDAR_A_FACTURA = "NO SE COMO HACERLO"; // TODO
 																			// Terminar
@@ -40,6 +40,7 @@ public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 	private PreparedStatement psDesconectarProducto;
 	private PreparedStatement psMeterProducto;
 	private PreparedStatement psBorrarCarrito;
+	private PreparedStatement psBorrarProducto;
 	private PreparedStatement psMandarAFactura;
 
 	// Constructor.
@@ -156,6 +157,10 @@ public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 			// Primero miramos/creamos el carrito.
 			crearCarritoUsuario(id_usuario);
 
+			// Segundo miramos si existe un producto ya, si existe agregamos
+			// uno.
+			aumentarProducto(id_producto, id_usuario);
+
 			// Sentencia sin valores.
 			psMeterProducto = con.prepareStatement(INSERTAR_PRODUCTO);
 			// Metemos los parametros.
@@ -166,6 +171,30 @@ public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 
 			// Hacemos la sentencia SQL.
 			psMeterProducto.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * Para aumentar en uno un producto del carrito, si existe dicho producto.
+	 */
+	public void aumentarProducto(int id_producto, int id_usuario) {
+
+		try {
+			// Preparamos la sentencia SQL.
+			psAumentarUnProducto = con.prepareStatement(AUMENTAR_UN_PRODUCTO);
+
+			// Metemos los valores.
+			psAumentarUnProducto.setInt(1, id_producto);
+			psAumentarUnProducto.setInt(2, id_usuario);
+
+			System.out.println("Sentecia para aumentar en uno si el producto existe: " + psAumentarUnProducto);
+
+			// Ejecutamos la sentencia.
+			psAumentarUnProducto.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -186,9 +215,24 @@ public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 	 * Elimina un producto del carrito
 	 */
 	@Override
-	public void eliminarProducto(int id_producto) {
-		// TODO Auto-generated method stub
+	public void eliminarProducto(int id_usuario, int id_producto) {
 
+		try {
+
+			// Preparamos la sentencia SQL.
+			psBorrarProducto = con.prepareStatement(ELIMINAR_PRODUCTO);
+
+			// Metemos los parametros.
+			psBorrarProducto.setInt(1, id_usuario);
+			psBorrarProducto.setInt(2, id_producto);
+
+			// Ejecutamos la sentencia.
+			psBorrarProducto.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
