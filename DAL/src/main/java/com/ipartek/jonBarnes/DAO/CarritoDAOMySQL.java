@@ -23,7 +23,7 @@ public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 	// atributos.
 
 	// Sentencias SQL.
-	private final static String MOSTRAR_CARRITO = "SELECT productos.id,productos.nombre,productos.descripcion,productos.precio,carrito_productos.cantidad,productos.Imagen FROM productos,carrito,carrito_productos WHERE carrito_productos.id_productos = productos.id AND carrito.id_usuario = carrito_productos.id_carrito AND carrito.id_usuario=?";
+	private final static String MOSTRAR_CARRITO = "SELECT 	productos.id,	productos.nombre, productos.descripcion, productos.precio, carrito_productos.cantidad, productos.Imagen  FROM  	productos,carrito,carrito_productos WHERE carrito.id= (SELECT id FROM carrito WHERE id_usuario=?) AND carrito_productos.id_carrito=(SELECT id FROM carrito WHERE id_usuario=?) AND productos.id = carrito_productos.id_productos";
 	private final static String NUEVO_CARRITO = "INSERT IGNORE INTO carrito set id_usuario = ?,numero_carrito=?, fecha=?";
 	private final static String AUMENTAR_UN_PRODUCTO = "UPDATE IGNORE carrito_productos SET cantidad=cantidad+1 WHERE id_productos=? AND id_carrito=(SELECT numero_carrito FROM carrito WHERE id_usuario=?)";
 	private final static String DESCONTAR_PRODUCTO = "UPDATE IGNORE carrito_productos SET cantidad=cantidad+1 WHERE id_productos=? AND id_carrito=(SELECT numero_carrito FROM carrito WHERE id_usuario=?)";
@@ -72,6 +72,10 @@ public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 			psMostrarCarrito = con.prepareStatement(MOSTRAR_CARRITO);
 
 			psMostrarCarrito.setInt(1, id_usuario);
+			psMostrarCarrito.setInt(2, id_usuario);
+
+			System.out.println("Mostrar id_usuario: " + id_usuario);
+			System.out.println("Sentencia para mostrar el carrito: " + psMostrarCarrito);
 
 			// Ejecutamos la sentencia SQL.
 			rs = psMostrarCarrito.executeQuery();

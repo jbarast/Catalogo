@@ -98,6 +98,8 @@ public class CarritoCRUDServlet extends HttpServlet {
 		Usuario usuario = new Usuario();
 		usuario = (Usuario) session.getAttribute("usuario");
 
+		System.out.println("Usuario que tenemos en CarritoCRUD: " + usuario);
+
 		// Las operaciones.
 		try {
 
