@@ -27,7 +27,7 @@ public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 	private final static String NUEVO_CARRITO = "INSERT IGNORE INTO carrito set id_usuario = ?,numero_carrito=?, fecha=?";
 	private final static String AUMENTAR_UN_PRODUCTO = "UPDATE IGNORE carrito_productos SET cantidad=cantidad+1 WHERE id_productos=? AND id_carrito=(SELECT numero_carrito FROM carrito WHERE id_usuario=?)";
 	private final static String DESCONTAR_PRODUCTO = "UPDATE IGNORE carrito_productos SET cantidad=cantidad+1 WHERE id_productos=? AND id_carrito=(SELECT numero_carrito FROM carrito WHERE id_usuario=?)";
-	private final static String INSERTAR_PRODUCTO = "INSERT IGNORE INTO carrito_productos SET cantidad='1', id_productos=?, id_carrito=(SELECT numero_carrito FROM carrito WHERE id_usuario=?);";
+	private final static String INSERTAR_PRODUCTO = "INSERT IGNORE INTO carrito_productos SET cantidad='1', id_productos=?, id_carrito=(SELECT id FROM carrito WHERE id_usuario=?);";
 	private final static String ELIMINAR_PRODUCTO = "DELETE FROM carrito_productos WHERRE id_carrito=? AND id_productos=?";
 	private final static String BORRAR_CARRITO = "DELETE FROM carrito WHERE id_usuario=?";
 	private final static String MANDAR_A_FACTURA = "NO SE COMO HACERLO"; // TODO
@@ -148,17 +148,17 @@ public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 	public void meterProducto(int id_producto, int id_usuario) {
 
 		try {
-			psMeterProducto = con.prepareStatement(INSERTAR_PRODUCTO);
-
-			// Metemos los parametros.
-			psMeterProducto.setInt(1, id_producto);
-			psMeterProducto.setInt(2, id_usuario);
-
-			// Miramos lo de escribir.
-			System.out.println(psMeterProducto);
 
 			// Primero miramos/creamos el carrito.
 			crearCarritoUsuario(id_usuario);
+
+			// Sentencia sin valores.
+			psMeterProducto = con.prepareStatement(INSERTAR_PRODUCTO);
+			// Metemos los parametros.
+			psMeterProducto.setInt(1, id_producto);
+			psMeterProducto.setInt(2, id_usuario);
+			// Miramos la sentencia.
+			System.out.println("Sentencia :" + psMeterProducto);
 
 			// Hacemos la sentencia SQL.
 			psMeterProducto.executeUpdate();

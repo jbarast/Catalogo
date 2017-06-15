@@ -12,10 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.ipartek.jonBarnes.DAO.DAOException;
 import org.apache.log4j.Logger;
 
 import com.ipartek.jonBarnes.DAL.UsuarioDALFactory;
+import com.ipartek.jonBarnes.DAO.DAOException;
 import com.ipartek.jonBarnes.DAO.UsuarioDAOMySQL;
 import com.ipartek.jonBarnes.DAO.interfaces.UsuarioDAO;
 import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
@@ -54,6 +54,7 @@ public class LoginServlet extends HttpServlet {
 
 		// DAO
 		daoUsuarios = new UsuarioDAOMySQL("jdbc:mysql://localhost/ipartek", "root", "");
+
 		// Recoger datos de vistas
 		String nombre = request.getParameter("nombre");
 		String pass = request.getParameter("pass");
@@ -95,80 +96,80 @@ public class LoginServlet extends HttpServlet {
 		// }
 		// }
 
-		//Operaciones.
-		try{
+		// Operaciones.
+		try {
 
 			// abrimos la conexin.
 			daoUsuarios.abrirConexion();
 
+			// ESTADOS
 
-		// ESTADOS
+			boolean esValido = usuariosDAL.validar(usuario);
+			// boolean esValido=true; //TODO cambiarlo, es para una prueba
+			// unicamente.
 
+			boolean sinParametros = usuario.getUsername() == null;
 
-		boolean esValido = usuariosDAL.validar(usuario);
-			//boolean esValido=true; //TODO cambiarlo, es para una prueba unicamente.
+			boolean esUsuarioYaRegistrado = session.getAttribute("usuario") != null;
 
-		boolean sinParametros = usuario.getUsername() == null;
+			boolean quiereSalir = "logout".equals(opcion);
 
-		boolean esUsuarioYaRegistrado = session.getAttribute("usuario") != null;
+			boolean nombreValido = usuario.getUsername() != null
+					&& usuario.getUsername().length() >= ConstantesGlobales.MINIMO_CARACTERES;
+			boolean passValido = !(usuario.getPassword() == null || usuario.getPassword().length() < ConstantesGlobales.MINIMO_CARACTERES);
 
-		boolean quiereSalir = "logout".equals(opcion);
+			// Redirigir a una nueva vista
+			if (quiereSalir) {
 
-		boolean nombreValido = usuario.getUsername() != null
-				&& usuario.getUsername().length() >= ConstantesGlobales.MINIMO_CARACTERES;
-		boolean passValido = !(usuario.getPassword() == null || usuario.getPassword().length() < ConstantesGlobales.MINIMO_CARACTERES);
+				// Indicamos quien sale de la session.
+				log.info(String.format("Fin de sesion de %s.", usuario.getUsername()));
 
+				// Finalizamos la sesion.
+				session.invalidate();
+				request.getRequestDispatcher(ConstantesGlobales.RUTA_LOGIN).forward(request, response);
+			} else if (esUsuarioYaRegistrado) {
+				// request.getRequestDispatcher(RUTA_PRINCIPAL).forward(request,
+				// response);
+				log.info("Usuario ya registrado.");
+				response.sendRedirect("/productocrud");
+			} else if (sinParametros) {
+				request.getRequestDispatcher(ConstantesGlobales.RUTA_LOGIN).forward(request, response);
+			} else if (!nombreValido || !passValido) {
+				usuario.setErrores("El nombre y la pass deben tener como m�nimo "
+						+ ConstantesGlobales.MINIMO_CARACTERES + " caracteres y son ambos requeridos");
+				request.setAttribute("usuario", usuario);
+				request.getRequestDispatcher(ConstantesGlobales.RUTA_LOGIN).forward(request, response);
+			} else if (esValido) {
+				Usuario usuarioAmeter = new Usuario();
 
+				usuarioAmeter = usuariosDAL.findbyUsername(nombre);
 
-		// Redirigir a una nueva vista
-		if (quiereSalir) {
+				session.setAttribute("usuario", usuarioAmeter);
+				// response.sendRedirect("principal.jsp");
+				// request.getRequestDispatcher(RUTA_PRINCIPAL).forward(request,
+				// response);
 
-			// Indicamos quien sale de la session.
-			log.info(String.format("Fin de sesion de %s.", usuario.getUsername()));
+				log.info(String.format("Inicio de session de %s.", usuario.getUsername()));
+				response.sendRedirect("/productocrud");
 
-			// Finalizamos la sesion.
-			session.invalidate();
-			request.getRequestDispatcher(ConstantesGlobales.RUTA_LOGIN).forward(request, response);
-		} else if (esUsuarioYaRegistrado) {
-			// request.getRequestDispatcher(RUTA_PRINCIPAL).forward(request,
-			// response);
-			log.info("Usuario ya registrado.");
-			response.sendRedirect("/productocrud");
-		} else if (sinParametros) {
-			request.getRequestDispatcher(ConstantesGlobales.RUTA_LOGIN).forward(request, response);
-		} else if (!nombreValido || !passValido) {
-			usuario.setErrores("El nombre y la pass deben tener como m�nimo " + ConstantesGlobales.MINIMO_CARACTERES
-					+ " caracteres y son ambos requeridos");
-			request.setAttribute("usuario", usuario);
-			request.getRequestDispatcher(ConstantesGlobales.RUTA_LOGIN).forward(request, response);
-		} else if (esValido) {
-			session.setAttribute("usuario", usuario);
-			// response.sendRedirect("principal.jsp");
-			// request.getRequestDispatcher(RUTA_PRINCIPAL).forward(request,
-			// response);
+			} else {
+				usuario.setErrores("El usuario y contrase�a introducidos no son v�lidos");
+				request.setAttribute("usuario", usuario);
+				request.getRequestDispatcher(ConstantesGlobales.RUTA_LOGIN).forward(request, response);
 
-			log.info(String.format("Inicio de session de %s.", usuario.getUsername()));
-			response.sendRedirect("/productocrud");
+			}
+		} catch (Exception e) {
+			throw new DAOException("Error en las operacion  con la base de  datos en login.", e);
 
-		} else {
-			usuario.setErrores("El usuario y contrase�a introducidos no son v�lidos");
-			request.setAttribute("usuario", usuario);
-			request.getRequestDispatcher(ConstantesGlobales.RUTA_LOGIN).forward(request, response);
-
-		}
-	}catch (Exception e){
-			throw new DAOException("Error en las operacion  con la base de  datos en login.",e);
-
-
-		}finally {
-		//cerramos la conexion con la base de datos.
-			try{
+		} finally {
+			// cerramos la conexion con la base de datos.
+			try {
 				usuariosDAL.cerrarConexion();
 
-			}catch (Exception e){
-				throw new DAOException("Error en la dexconesion con la base de datos.",e);
+			} catch (Exception e) {
+				throw new DAOException("Error en la dexconesion con la base de datos.", e);
 
 			}
 		}
-		}
+	}
 }

@@ -11,11 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.ipartek.jonBarnes.DAL.CarritoDALFactory;
 import com.ipartek.jonBarnes.DAL.ProductoDALFactory;
 //import com.ipartek.jonBarnes.DAL.ProductoDALInterface;
 //Las rutas.
 //Mis imports.
 import com.ipartek.jonBarnes.DAO.DAOException;
+import com.ipartek.jonBarnes.DAO.interfaces.CarritoDAO;
 import com.ipartek.jonBarnes.DAO.interfaces.ProductoDAO;
 import com.ipartek.jonBarnes.constantesGlobales.ConstantesGlobales;
 import com.ipartek.jonBarnes.tipos.ProductoStockImagen;
@@ -62,10 +64,7 @@ public class ListaProductosServlet extends HttpServlet {
 		HttpServletResponse res = (HttpServletResponse) response;
 
 		HttpSession session = ((HttpServletRequest) request).getSession();
-		ProductoDAO dalCarrito = (ProductoDAO) session.getAttribute("dalCarrito");
-
-		// Miramos la operacion a realiczar.
-		String op = request.getParameter("op");
+		CarritoDAO dalCarrito = (CarritoDAO) session.getAttribute("dalCarrito");
 
 		// Miramos que la dalProductos no este vacia.
 		if (dalProductos == null) {
@@ -82,7 +81,7 @@ public class ListaProductosServlet extends HttpServlet {
 		if (dalCarrito == null) {
 
 			// Creamos el carrito.
-			dalCarrito = ProductoDALFactory.getProductosDAL();
+			dalCarrito = CarritoDALFactory.getProductosDAL();
 		}
 		// ////////**************///////////////
 
@@ -90,60 +89,72 @@ public class ListaProductosServlet extends HttpServlet {
 
 		ProductoStockImagen producto;
 
-		//inicializamos la base de datos.
+		// inicializamos la base de datos.
 		dalProductos.abrirConexion();
+		// dalCarrito.abrirConexion();
 
-		//Las operaciones con la base de datos.
-		try{
-		// Sin peracion. Mostramos todos los usuarios.
-		if (op == null) {
+		// Miramos la operacion a realiczar.
+		String op = request.getParameter("op");
 
-			ProductoStockImagen[] productos = dalProductos.findAll();
+		// El usuario.
 
-			request.setAttribute("productos", productos);
+		Usuario usuario = new Usuario();
+		session = ((HttpServletRequest) request).getSession();
+		usuario = (Usuario) session.getAttribute("usuario");
 
-			request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_PRODUCTOS_USUARIO).forward(request, response);
-		} else {
-			int id = Integer.parseInt(request.getParameter("id"));
+		System.out.println("En listaproductosServlet: " + usuario);
 
-			Usuario usuario;
+		// Las operaciones con la base de datos.
+		try {
+			// Sin peracion. Mostramos todos los usuarios.
+			if (op == null) {
 
-			// Operacion a realizar, modificar, borrar o dar de alta a un
-			// usuario.
-			switch (op) {
-			case "modificar":
-			case "borrar":
-				producto = dalProductos.findById(id);
-				request.setAttribute("producto", producto);
-			case "alta":
-				request.getRequestDispatcher(ConstantesGlobales.RUTA_FORMULARIO_PRODUCTOS_USUARIO).forward(request,
-						response);
-				break;
-			default:
+				ProductoStockImagen[] productos = dalProductos.findAll();
+
+				request.setAttribute("productos", productos);
+
 				request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_PRODUCTOS_USUARIO).forward(request,
 						response);
+			} else {
+				int id = Integer.parseInt(request.getParameter("id"));
+
+				// Operacion a realizar, modificar, borrar o dar de alta a un
+				// usuario.
+				switch (op) {
+				case "modificar":
+				case "borrar":
+					producto = dalProductos.findById(id);
+					// System.out.println(producto);
+					request.setAttribute("producto", producto);
+				case "alta":
+					request.getRequestDispatcher(ConstantesGlobales.RUTA_FORMULARIO_PRODUCTOS_USUARIO).forward(request,
+							response);
+					break;
+				default:
+					request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_PRODUCTOS_USUARIO).forward(request,
+							response);
+				}
+
+				// /////////**************//////////
+				// Lo siguiente esta bien, codigo del medio cambiado.
+				// ProductoStockImagen[] productos =
+				// dalProductos.buscarTodosLosProductos();
+				// request.setAttribute("productos", productos);
+				// request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_PRODUCTOS_USUARIO).forward(request,
+				// response);
+
 			}
+		} catch (Exception e) {
+			throw new DAOException("Error en las operaicones con la base de datos.", e);
 
-			// /////////**************//////////
-			// Lo siguiente esta bien, codigo del medio cambiado.
-			// ProductoStockImagen[] productos =
-			// dalProductos.buscarTodosLosProductos();
-			// request.setAttribute("productos", productos);
-			// request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_PRODUCTOS_USUARIO).forward(request,
-			// response);
+		} finally {
 
-		}
-	}catch (Exception e){
-			throw new DAOException("Error en las operaicones con la base de datos.",e);
-
-		}finally {
-
-		    //cerramos la base de datos.
-			try{
+			// cerramos la base de datos.
+			try {
 				dalProductos.cerrarConexion();
-			}catch (Exception e){
-				throw new DAOException("Error en la dexconesion con la base de datos.",e);
+			} catch (Exception e) {
+				throw new DAOException("Error en la dexconesion con la base de datos.", e);
 			}
 		}
-		}
+	}
 }
