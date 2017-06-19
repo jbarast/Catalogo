@@ -41,7 +41,7 @@ ${producto}
 			<input id="nombre" name="nombre"
 			  required="required"  value="${carrito.nombre}" 
 			  
-			  <c:if test="${param.op == 'modificar' or param.op == 'borrar'}">
+			  <c:if test="${param.op == 'anadir' or param.op == 'borrar'}">
 			  	readonly="readonly"
 			  </c:if>   
 		  	/>

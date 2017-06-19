@@ -135,6 +135,34 @@ public class CarritoFormServlet extends HttpServlet {
 
 			}
 
+			if (op.equals("aumentar")) {
+
+				// Indicamos que productos vamos a añadir una unidad.
+				log.info(String.format("Objeto %s añadido al carrito", productoBorrarCarrito.getNombre()));
+
+				// Anadimos el producto.
+				dalCarrito.meterProducto(productoBorrarCarrito.getId(), usuario.getId());
+
+				// Rediccionamiento.
+				request.getRequestDispatcher(ConstantesGlobales.RUTA_SERVLET_LISTADO_CARRITO)
+						.forward(request, response);
+
+			}
+
+			if (op.equals("quitar")) {
+
+				// Indicamos que productos vamos a añadir una unidad.
+				log.info(String.format("Objeto %s a quitar una unidad del carrito", productoBorrarCarrito.getNombre()));
+
+				// Anadimos el producto.
+				dalCarrito.descontarProducto(productoBorrarCarrito.getId(), usuario.getId());
+
+				// Rediccionamiento.
+				request.getRequestDispatcher(ConstantesGlobales.RUTA_SERVLET_LISTADO_CARRITO)
+						.forward(request, response);
+
+			}
+
 		} catch (Exception e) {
 
 			throw new DAOException("Error en la dexconesion con la base de datos.", e);

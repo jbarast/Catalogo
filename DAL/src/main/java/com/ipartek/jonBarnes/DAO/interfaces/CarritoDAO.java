@@ -24,7 +24,7 @@ public interface CarritoDAO extends IpartekDAO {
 	public void meterProducto(int id_producto, int id_usuario);
 
 	// Para descontar un producto.
-	public void descontarProducto(int id_producto);
+	void descontarProducto(int id_producto, int id_usuario);
 
 	// Par eliminar un producto del carrito.
 	public void eliminarProducto(int id_usuario, int id_producto);

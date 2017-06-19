@@ -35,7 +35,7 @@
 			<input id="nombre" name="nombre"
 			  required="required"  value="${producto.nombre}" 
 			  
-			  <c:if test="${param.op == 'modificar' or param.op == 'borrar'}">
+			  <c:if test="${param.op == 'anadir' or param.op == 'borrar'}">
 			  	readonly="readonly"
 			  </c:if>   
 		  	/>
@@ -51,7 +51,7 @@
 		<fieldset>
 			<label for="id">id</label> 
 			<input  id="id" name="id" 
-			<c:if test="${param.op=='modificar' }">
+			<c:if test="${param.op=='anadir' }">
 			readonly="readonly"
 			value="${producto.id}"
 			</c:if>
@@ -63,7 +63,7 @@
 		<fieldset>
 			<label for="descripcion">Descripcion</label> 
 			<input  id="descripcion" name="descripcion"  
-			<c:if test="${param.op=='modificar' }">
+			<c:if test="${param.op=='anadir' }">
 			value="${producto.descripcion}"
 			</c:if>
 			/>
@@ -73,7 +73,7 @@
 		<fieldset>
 			<label for="precio">Precio</label> 
 			<input  id="precio" name="precio" 
-			<c:if test="${param.op=='modificar' }">
+			<c:if test="${param.op=='anadir' }">
 			value="${producto.precio}"
 			</c:if>
 			/>
@@ -83,7 +83,7 @@
 		<fieldset>
 			<label for="stock">Stock</label> 
 			<input  id="stock" name="stock" 
-			<c:if test="${param.op=='modificar' }">
+			<c:if test="${param.op=='anadir' }">
 			value="${producto.stock}"
 			</c:if>
 			/>
@@ -93,7 +93,7 @@
 		<fieldset>
 			<label for="rutaImagen">Imagen</label> 
 			<input  id="rutaImagen" name="rutaImagen" 
-			<c:if test="${param.op=='modificar' }">
+			<c:if test="${param.op=='anadir' }">
 			value="${producto.rutaImagen}"
 			</c:if>
 			/>

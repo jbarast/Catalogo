@@ -43,6 +43,8 @@
 				<td>
 					
 					<a href="carritoform?op=borrar&id=${productoCarrito.id}">Borrar</a>
+					<a href="carritoform?op=aumentar&id=${productoCarrito.id }">Aumentar una Unidad</a>
+					<a href="carritoform?op=quitar&id=${productoCarrito.id}">Quitar una Unidad</a>
 				</td>
 				<td>${productoCarrito.id}</td>
 				<td>${productoCarrito.nombre}</td>

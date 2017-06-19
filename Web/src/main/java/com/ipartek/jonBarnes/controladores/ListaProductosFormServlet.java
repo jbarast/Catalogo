@@ -99,21 +99,6 @@ public class ListaProductosFormServlet extends HttpServlet {
 		// Miaramos que valor tiene dalProductos.
 		log.info(String.format("dalProductos: %s", dalProductos));
 
-		// Cargamos los datos a a�adir.
-
-		// Miramos que producto es.
-		int idProducto = Integer.parseInt(request.getParameter("id"));
-		// Miramos que id coge de producto.
-		log.info(String.format("Producot: %s", idProducto));
-		// Producto que vamos a utilizar.
-		ProductoStockImagen productoAnadirCarrito;// = new
-													// ProductoStockImagen();
-		// Buscamos el producto en el dalProductos.
-		productoAnadirCarrito = dalProductos.findById(idProducto);
-
-		// Producto que vamos a a�adir.
-		log.info(String.format("productoAnadirCarrito: %s ", productoAnadirCarrito));
-
 		// Las operaciones.
 		try {
 
@@ -125,6 +110,21 @@ public class ListaProductosFormServlet extends HttpServlet {
 
 				return;
 			}
+
+			// Cargamos los datos a a�adir.
+
+			// Miramos que producto es.
+			int idProducto = Integer.parseInt(request.getParameter("id"));
+			// Miramos que id coge de producto.
+			log.info(String.format("Producot: %s", idProducto));
+			// Producto que vamos a utilizar.
+			ProductoStockImagen productoAnadirCarrito;// = new
+														// ProductoStockImagen();
+			// Buscamos el producto en el dalProductos.
+			productoAnadirCarrito = dalProductos.findById(idProducto);
+
+			// Producto que vamos a a�adir.
+			log.info(String.format("productoAnadirCarrito: %s ", productoAnadirCarrito));
 
 			if (op.startsWith("anadir")) {
 				try {
@@ -157,8 +157,8 @@ public class ListaProductosFormServlet extends HttpServlet {
 					return;
 
 				}
-				request.getRequestDispatcher(ConstantesGlobales.RUTA_SERVLET_LISTADO_PRODUCTOS_USUARIO).forward(
-						request, response);
+				request.getRequestDispatcher(ConstantesGlobales.RUTA_LISTADO_PRODUCTOS_USUARIO).forward(request,
+						response);
 
 			}
 
