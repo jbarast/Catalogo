@@ -42,7 +42,7 @@
 			<tr>
 				<td>
 					
-					<a href="carritoform?op=borrar&id=${productoCarrito.nombre}">Borrar</a>
+					<a href="carritoform?op=borrar&id=${productoCarrito.id}">Borrar</a>
 				</td>
 				<td>${productoCarrito.id}</td>
 				<td>${productoCarrito.nombre}</td>

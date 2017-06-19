@@ -28,7 +28,7 @@ public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 	private final static String AUMENTAR_UN_PRODUCTO = "UPDATE IGNORE carrito_productos SET cantidad=cantidad+1 WHERE id_productos=? AND id_carrito=(SELECT id FROM carrito WHERE id_usuario=?)";
 	private final static String DESCONTAR_PRODUCTO = "UPDATE IGNORE carrito_productos SET cantidad=cantidad+1 WHERE id_productos=? AND id_carrito=(SELECT id FROM carrito WHERE id_usuario=?)";
 	private final static String INSERTAR_PRODUCTO = "INSERT IGNORE INTO carrito_productos SET cantidad='1', id_productos=?, id_carrito=(SELECT id FROM carrito WHERE id_usuario=?);";
-	private final static String ELIMINAR_PRODUCTO = "DELETE FROM carrito_productos WHERRE id_carrito=(SELECT id FROM carrito WHERE id_usuario=?) AND id_productos=?";
+	private final static String ELIMINAR_PRODUCTO = "DELETE FROM carrito_productos WHERE id_carrito=(SELECT id FROM carrito WHERE id_usuario=?) AND id_productos=?";
 	private final static String BORRAR_CARRITO = "DELETE FROM carrito WHERE id_usuario=?";
 	private final static String MANDAR_A_FACTURA = "NO SE COMO HACERLO"; // TODO
 																			// Terminar
@@ -225,6 +225,9 @@ public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 			// Metemos los parametros.
 			psBorrarProducto.setInt(1, id_usuario);
 			psBorrarProducto.setInt(2, id_producto);
+
+			// Mostramoas la funcion.
+			System.out.println("CarritoDAOMySQL->Funcion eliminar Productos: " + psBorrarProducto);
 
 			// Ejecutamos la sentencia.
 			psBorrarProducto.executeUpdate();
