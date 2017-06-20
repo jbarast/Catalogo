@@ -2,6 +2,11 @@
 
 package com.ipartek.jonBarnes.tipos;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * 
  * Clase usuario. Para el ejemplo de JDBC.
@@ -10,14 +15,27 @@ package com.ipartek.jonBarnes.tipos;
  * @version 07/06/2017
  *
  */
+@Entity
+@Table(name = "usuarios")
 public class Usuario {
 
 	// atributos.
+	@Id
+	@Column(name = "id")
 	private int id;
+
+	@Column(name = "id_roles")
 	private int id_roles;
+
+	@Column(name = "nombre_completo")
 	private String nombre_completo;
+
+	@Column(name = "password")
 	private String password;
+
+	@Column(name = "username")
 	private String username;
+
 	private String errores;
 
 	// Constructores.

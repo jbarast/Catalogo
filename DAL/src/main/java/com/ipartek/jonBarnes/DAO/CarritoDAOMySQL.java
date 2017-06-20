@@ -30,8 +30,9 @@ public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 	private final static String INSERTAR_PRODUCTO = "INSERT IGNORE INTO carrito_productos SET cantidad='1', id_productos=?, id_carrito=(SELECT id FROM carrito WHERE id_usuario=?);";
 	private final static String ELIMINAR_PRODUCTO = "DELETE FROM carrito_productos WHERE id_carrito=(SELECT id FROM carrito WHERE id_usuario=?) AND id_productos=?";
 	private final static String BORRAR_CARRITO = "DELETE FROM carrito WHERE id_usuario=?";
-	private final static String MANDAR_A_FACTURA = "NO SE COMO HACERLO"; // TODO
-																			// Terminar
+	private final static String MANDAR_A_FACTURA_CARRITO = "INSERT INTO facturas(numero_factura,id_usuarios,fecha) SELECT carrito.numero_carrito,carrito.id_usuario,carrito.fecha FROM carrito WHERE carrito.id_usuario = ?";
+
+	private final static String MANDAR_A_FACTURA_CARRITO_PRODUCTOS = "INSERT INTO facturas_productos(id_facturas,id_productos,cantidad) SELECT carrito_productos.id_carrito,carrito_productos.id_productos,carrito_productos.cantidad FROM carrito_productos WHERE carrito_productos.id_carrito = (SELECT id_carrito FROM carrito WHERE id_usuario = ?";
 
 	// Preparamos los atributos de sentencias.
 	private PreparedStatement psMostrarCarrito;
