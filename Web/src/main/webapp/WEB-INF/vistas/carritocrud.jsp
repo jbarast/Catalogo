@@ -59,9 +59,9 @@
 	</tbody>
 </table>
 
-				
-
-
+<p>				
+<a class="boton_personalizado" href="/carritoform?op=comprar&id=${usuario.id}">Realizar Pedido</a>
+</p>
 
 <%--pie --%>
 <%@ include file="includes/pie.jsp"%>

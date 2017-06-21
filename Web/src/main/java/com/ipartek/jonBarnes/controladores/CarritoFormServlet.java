@@ -163,6 +163,20 @@ public class CarritoFormServlet extends HttpServlet {
 
 			}
 
+			if (op.equals("comprar")) {
+
+				// Indicamos que vamos a hacer la operacion.
+				System.out.println("Operacion facturar.");
+				// Indicamos que vamos a meter un producto en factura.
+				log.info(String.format("El usuario %s a hecho una compra.", usuario.getUsername()));
+
+				// Hacemos la operacion de mandar a factura.
+				dalCarrito.mandarAFactura(usuario.getId());
+
+				// Rediccionamos a facturas.
+				request.getRequestDispatcher(ConstantesGlobales.RUTA_SERVLET_LISTADO).forward(request, response);
+			}
+
 		} catch (Exception e) {
 
 			throw new DAOException("Error en la dexconesion con la base de datos.", e);

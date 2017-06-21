@@ -30,9 +30,9 @@ public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 	private final static String INSERTAR_PRODUCTO = "INSERT IGNORE INTO carrito_productos SET cantidad='1', id_productos=?, id_carrito=(SELECT id FROM carrito WHERE id_usuario=?);";
 	private final static String ELIMINAR_PRODUCTO = "DELETE FROM carrito_productos WHERE id_carrito=(SELECT id FROM carrito WHERE id_usuario=?) AND id_productos=?";
 	private final static String BORRAR_CARRITO = "DELETE FROM carrito WHERE id_usuario=?";
-	private final static String BORRAR_CARRITO_PRODUCTOS = "DELETE FROM carrito WHERE id_carrito = (SELECT id FROM carrito WHERE id_usuario = ?)";
+	private final static String BORRAR_CARRITO_PRODUCTOS = "DELETE FROM carrito_productos WHERE id_carrito = (SELECT id FROM carrito WHERE id_usuario = ?)";
 	// TODO terminar estas sentencias SQL.
-	private final static String MANDAR_A_FACTURA_CARRITO = "INSERT INTO facturas(id,numero_factura,id_usuario,fecha) SELECT carrito.id,carrito.numero_carrito,id_usuario,carrito.fecha) FROM carrito WHERE carrito.id_usuario = ?";
+	private final static String MANDAR_A_FACTURA_CARRITO = "INSERT INTO facturas(id,numero_factura,id_usuarios,fecha) SELECT carrito.id,carrito.numero_carrito,id_usuario,carrito.fecha FROM carrito WHERE carrito.id_usuario = ?";
 	private final static String MANDAR_A_FACTURA_CARRITO_PRODUCTOS = "INSERT INTO facturas_productos(id_facturas,id_productos,cantidad) SELECT  carrito_productos.id_carrito,	carrito_productos.id_productos,	carrito_productos.cantidad FROM carrito_productos WHERE carrito_productos.id_carrito = (SELECT id FROM carrito WHERE id_usuario = ? );";
 
 	// Preparamos los atributos de sentencias.
@@ -273,6 +273,37 @@ public class CarritoDAOMySQL extends ProductoDAOMySQL implements CarritoDAO {
 	@Override
 	public void mandarAFactura(int id_usuario) {
 		// TODO Auto-generated method stub
+
+		try {
+
+			// Preparamos las sentencias SQL.
+			psMandarAFacturaCarrito = con.prepareStatement(MANDAR_A_FACTURA_CARRITO);
+			psMandarAFacturaCarritoFactura = con.prepareStatement(MANDAR_A_FACTURA_CARRITO_PRODUCTOS);
+			psBorrarCarritoProductos = con.prepareStatement(BORRAR_CARRITO_PRODUCTOS);
+
+			// Metemos los parametros.
+			psMandarAFacturaCarrito.setInt(1, id_usuario);
+			psMandarAFacturaCarritoFactura.setInt(1, id_usuario);
+			psBorrarCarritoProductos.setInt(1, id_usuario);
+
+			// Miramos las sentencias SQL:
+			System.out.println("Sentencias SQL para mandar una factura");
+			System.out.println("Primera sentencia" + psMandarAFacturaCarrito);
+			System.out.println("Segunda sentencia" + psMandarAFacturaCarritoFactura);
+			System.out.println("Tercera sentencia" + psBorrarCarritoProductos);
+
+			// Primero copia el carrito en facturas.
+			psMandarAFacturaCarrito.executeUpdate();
+			// Luego copia el carrito_facturas del usuario en
+			// facturas_productos.
+			psMandarAFacturaCarritoFactura.executeUpdate();
+			// Borra el carrito_facturas.
+			psBorrarCarritoProductos.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
