@@ -118,6 +118,13 @@
       com.ipartek.jonBarnes.controladores.CarritoFormServlet
     </servlet-class>
   </servlet>
+  <servlet>
+  	<description>
+  	</description>
+  	<display-name>listafacturas</display-name>
+  	<servlet-name>listafacturas</servlet-name>
+  	<servlet-class>com.ipartek.jonBarnes.controladores.ListaFacturas</servlet-class>
+  </servlet>
   
   <!-- Mapeo de las servlets. -->
   <servlet-mapping>
@@ -168,6 +175,10 @@
   <servlet-mapping>
   	<servlet-name>carritoform</servlet-name>
   	<url-pattern>/carritoform</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>listafacturas</servlet-name>
+  	<url-pattern>/listafacturas</url-pattern>
   </servlet-mapping>
   
   

@@ -53,4 +53,9 @@ public class ConstantesGlobales {
 	public static final String RUTA_FORMULARIO_CARRITO = RUTA + "carritoform.jsp";
 	public static final String RUTA_SERVLET_FORMULARIO_CARRITO = "/carritoform";
 
+	// Rutas para las facturas.
+
+	public static final String RUTA_LISTADO_FACTURAS = RUTA + "listafacturas.jsp";
+	public static final String RUTA_SERVLET_LISTADO_FACTURAS = "/listafacturas";
+
 }

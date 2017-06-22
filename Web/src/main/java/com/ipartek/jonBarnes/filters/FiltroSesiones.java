@@ -98,7 +98,8 @@ public class FiltroSesiones implements Filter {
 
 		if (!username.equals("admin") && !(path.equals("/login")) && !username.equals("")
 				&& !path.equals("/listaproductos") && !path.equals("/carritocrud") && !path.startsWith("/carritoform")
-				&& !path.startsWith("/listaproductosform")) {
+				&& !path.startsWith("/listaproductosform") && !path.equals("/listafacturas")
+				&& !path.equals("/factura")) {
 			// Mandame a la lista de productos.
 			res.sendRedirect("/listaproductos");
 

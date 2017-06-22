@@ -44,6 +44,8 @@
 			<li><a href="listaproductos">Vista usuario</a></li>
 			<li><a href="carritocrud">Carrito</a></li>
 			
+			<li><a href="listafacturas">Lista facturas</a></li>
+			
 			<li><a href="login?opcion=logout">Logout</a></li>
 		
 		</ul>
